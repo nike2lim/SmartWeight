@@ -5,4 +5,25 @@
     <string name="guide_training">Guide Training</string>
     <string name="blnak"></string>
 
+
+
+    <string name="level1">LEVEL 01</string>
+    <string name="level2">LEVEL 02</string>
+    <string name="level3">LEVEL 03</string>
+    <string name="level4">LEVEL 04</string>
+    <string name="level5">LEVEL 05</string>
+    <string name="level6">LEVEL 06</string>
+    <string name="level7">LEVEL 07</string>
+    <string name="level8">LEVEL 08</string>
+    <string name="level9">LEVEL 09</string>
+    <string name="level10">LEVEL 10</string>
+    <string name="level11">LEVEL 11</string>
+    <string name="level12">LEVEL 12</string>
+    <string name="level13">LEVEL 13</string>
+    <string name="level14">LEVEL 14</string>
+    <string name="level15">LEVEL 15</string>
+
+
+
+
 </resources>

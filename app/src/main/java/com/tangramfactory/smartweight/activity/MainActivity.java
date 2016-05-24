@@ -2,9 +2,7 @@ package com.tangramfactory.smartweight.activity;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTabHost;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,6 +13,7 @@ import com.tangramfactory.smartweight.SmartWeightApplication;
 import com.tangramfactory.smartweight.activity.base.BaseAppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends BaseAppCompatActivity  {
@@ -22,8 +21,6 @@ public class MainActivity extends BaseAppCompatActivity  {
 
     public Toolbar toolbar;
     private TabHost mTabHost;
-    private FragmentTabHost mFragmentTabHost;
-    ArrayList tabList = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +98,17 @@ public class MainActivity extends BaseAppCompatActivity  {
                 android.support.v4.app.FragmentManager fm =   getSupportFragmentManager();
                 GuideFragment guideFragment = (GuideFragment) fm.findFragmentByTag("Guide");
                 SelfFragment selfFragment = (SelfFragment) fm.findFragmentByTag("Self");
-                HistoryFragment recordFragment = (HistoryFragment) fm.findFragmentByTag("Record");
+                RecordFragment recordFragment = (RecordFragment) fm.findFragmentByTag("Record");
                 ProgressFragment progressFragment = (ProgressFragment) fm.findFragmentByTag("Progress");
                 android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+
+                List<android.support.v4.app.Fragment> fragmentList =  fm.getFragments();
+                for(int i= 0; i <  fragmentList.size(); i++){
+                    android.support.v4.app.Fragment fragment = fragmentList.get(i);
+                    if(fragment instanceof TextFragment) {
+                        ft.detach(fragment);
+                    }
+                }
 
                 if(guideFragment!=null)
                     ft.detach(guideFragment);
@@ -122,25 +127,29 @@ public class MainActivity extends BaseAppCompatActivity  {
                         ft.add(R.id.realtabcontent,new GuideFragment(), "Guide");
                     }else{
                         ft.attach(guideFragment);
+//                        ft.replace(R.id.realtabcontent, guideFragment);
                     }
 
                 }else if(tabId.equalsIgnoreCase("Self")) {
                     if(selfFragment==null){
                         ft.add(R.id.realtabcontent,new SelfFragment(), "Self");
                     }else{
+//                        ft.replace(R.id.realtabcontent, selfFragment);
                         ft.attach(selfFragment);
                     }
 
                 }else if(tabId.equalsIgnoreCase("Record")) {
                     if(recordFragment==null){
-                        ft.add(R.id.realtabcontent,new HistoryFragment(), "Record");
+                        ft.add(R.id.realtabcontent,new RecordFragment(), "Record");
                     }else{
+//                        ft.replace(R.id.realtabcontent, recordFragment);
                         ft.attach(recordFragment);
                     }
                 }else{
                     if(progressFragment==null){
                         ft.add(R.id.realtabcontent,new ProgressFragment(), "Progress");
                     }else{
+//                        ft.replace(R.id.realtabcontent, progressFragment);
                         ft.attach(progressFragment);
                     }
                 }
