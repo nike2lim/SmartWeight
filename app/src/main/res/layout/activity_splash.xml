@@ -1,33 +1,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res/com.tangramfactory.smartgym"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#191a1c"
     android:orientation="vertical" >
 
-    <android.support.v7.widget.Toolbar
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        app:contentInsetLeft="72dp"
-        app:contentInsetStart="72dp"
-        app:navigationIcon="@drawable/ic_top_setting"
-        app:theme="@style/ThemeOverlay.Custom.ActionBar"
-        app:title="@string/app_name" >
-
-    </android.support.v7.widget.Toolbar>
-
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:adjustViewBounds="false"
-        android:scaleType="centerCrop"
-        android:background="@drawable/bg_splash" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_splash"/>
 
 
 </LinearLayout>

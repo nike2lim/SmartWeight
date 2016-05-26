@@ -6,11 +6,13 @@
 
     <color name="default_color">#000000</color>
     <color name="white">#FFFFFF</color>
-    <color name="white_10">#19FFFFFF</color>
+    <color name="white_10">#25FFFFFF</color>
     <color name="white_20">#33FFFFFF</color>
     <color name="white_30">#4dFFFFFF</color>
     <color name="white_50">#80FFFFFF</color>
+    <color name="white_60">#99FFFFFF</color>
     <color name="white_80">#CCFFFFFF</color>
+    <color name="white_90">#E5FFFFFF</color>
 
     <color name="transparent">#00000000</color>
 

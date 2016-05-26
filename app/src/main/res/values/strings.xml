@@ -5,8 +5,6 @@
     <string name="guide_training">Guide Training</string>
     <string name="blnak"></string>
 
-
-
     <string name="level1">LEVEL 01</string>
     <string name="level2">LEVEL 02</string>
     <string name="level3">LEVEL 03</string>
@@ -23,7 +21,31 @@
     <string name="level14">LEVEL 14</string>
     <string name="level15">LEVEL 15</string>
 
+    <string name="title_step">STEP %d</string>
+    <string name="per_exercise">%1$d of %2$d Exercise</string>
 
 
+    <string name="text_flipper_bench_press">BENCH\nPRESS</string>
+    <string name="text_flipper_cable_pushdown">CABLE\nPUSHDOWN</string>
+    <string name="text_flipper_plank">PLANK</string>
+    <string name="text_flipper_kick_back">KICK\nBACK</string>
+    <string name="text_flipper_fly">FLY</string>
+    <string name="text_flipper_curl">CURL</string>
+    <string name="text_flipper_lunge">LUNGE</string>
+    <string name="text_flipper_row">ROW</string>
+    <string name="text_flipper_sit_up">SIT UP</string>
+    <string name="text_flipper_squat">SQUAT</string>
+    <string name="text_flipper_lateral_raises">LATERAL\nRAISES</string>
+    <string name="text_flipper_deadlift">DEADLIFT</string>
+    <string name="text_flipper_back_extension">BACK\nEXTENSION</string>
+    <string name="text_flipper_lat_pulldown">LAT\nPULLDOWN</string>
+    <string name="text_flipper_shoulder_press">SHOULDER\nPRESS</string>
+
+    <string name="text_dumbell">DUMBELL</string>
+    <string name="text_start">START</string>
+
+
+    <string name="text_underarmour">UA Record<font size="8"><sup>(TM)</sup></font></string>
+    <string name="text_angle">30<font size="10"><sup>o</sup></font></string>
 
 </resources>

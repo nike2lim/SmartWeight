@@ -14,7 +14,7 @@
         android:minHeight="?attr/actionBarSize"
         app:contentInsetLeft="72dp"
         app:contentInsetStart="72dp"
-        app:navigationIcon="@drawable/ic_top_setting"
+        app:navigationIcon="@drawable/selector_top_setting"
         app:theme="@style/ThemeOverlay.Custom.ActionBar"
         app:title="@string/guide_training" >
 
@@ -55,7 +55,7 @@
                 android:id="@android:id/tabcontent"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_marginBottom="58dp">
+                android:layout_marginBottom="56dp">
 
                 <LinearLayout
                     android:id="@+id/realtabcontent"

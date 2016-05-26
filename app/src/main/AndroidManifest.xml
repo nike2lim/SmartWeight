@@ -29,14 +29,20 @@
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SmartWeightTheme">
+            android:theme="@style/AppThemeFullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.WorkoutPreviewActivity" />
+        <activity android:name=".activity.VideoPlayerActivity" />
+        <activity android:name=".activity.WokoutActivity" />
+        <activity android:name=".activity.WorkoutReadyActivity"></activity>
     </application>
 
 </manifest>

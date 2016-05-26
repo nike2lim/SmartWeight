@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_marginTop="25dp"
         android:layout_gravity="center"
         android:gravity="center">
 
@@ -19,6 +20,16 @@
 
     </LinearLayout>
 
+<!--
+    <LinearLayout
+        android:id="@+id/indicator_default"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:background="#ff0000"
+        />
+-->
     <com.tangramfactory.smartweight.view.CircleIndicator
         android:id="@+id/indicator_default"
         android:layout_width="wrap_content"
@@ -27,19 +38,18 @@
         CircleIndicator:ci_width="5dp"
         CircleIndicator:ci_height="5dp"
         />
-
     <LinearLayout
         android:id="@+id/day_workout_layout"
         android:layout_width="226dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="25dp"
         android:layout_gravity="center"
         android:visibility="visible"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/oneday_text"
@@ -47,7 +57,8 @@
                 android:layout_height="wrap_content"
                 android:text="1 Day"
                 android:gravity="center"
-                android:textSize="18sp"
+                android:textSize="12sp"
+                android:textColor="@color/white"
                 android:background="@drawable/days_sel"/>
 
             <TextView
@@ -56,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:text="2 Day"
                 android:textColor="#aaaaaa"
-                android:textSize="18sp"
+                android:textSize="12sp"
                 android:gravity="center"
                 />
 
@@ -66,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:text="3 Day"
                 android:textColor="#aaaaaa"
-                android:textSize="18sp"
+                android:textSize="12sp"
                 android:gravity="center"
                 />
         </LinearLayout>
@@ -77,13 +88,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/daylayout"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="316dp"
+        android:layout_height="wrap_content"
         android:gravity="bottom"
-        android:visibility="gone"
+        android:visibility="visible"
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
@@ -94,7 +105,6 @@
 
 
     </LinearLayout>
-
 
 
 </LinearLayout>

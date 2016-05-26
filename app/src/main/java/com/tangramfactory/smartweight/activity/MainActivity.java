@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 
 import com.tangramfactory.smartweight.R;
@@ -49,6 +50,9 @@ public class MainActivity extends BaseAppCompatActivity  {
     private void loadCodeView() {
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup();
+        mTabHost.getTabWidget().setShowDividers(LinearLayout.SHOW_DIVIDER_BEGINNING);
+
+
 
         //Creating tab menu.
         TabHost.TabSpec tabMenu1 = mTabHost.newTabSpec("Guide");
