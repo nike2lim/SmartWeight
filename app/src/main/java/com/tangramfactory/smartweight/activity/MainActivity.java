@@ -53,7 +53,6 @@ public class MainActivity extends BaseAppCompatActivity  {
         mTabHost.getTabWidget().setShowDividers(LinearLayout.SHOW_DIVIDER_BEGINNING);
 
 
-
         //Creating tab menu.
         TabHost.TabSpec tabMenu1 = mTabHost.newTabSpec("Guide");
         TabHost.TabSpec tabMenu2 = mTabHost.newTabSpec("Self");
