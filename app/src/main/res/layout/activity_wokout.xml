@@ -19,7 +19,7 @@
         app:contentInsetLeft="72dp"
         app:contentInsetStart="72dp"
         app:theme="@style/ThemeOverlay.Custom.ActionBar"
-        app:title="@string/guide_training" >
+        app:title="@string/title_guide_training" >
 
 
         <ImageButton
@@ -131,6 +131,15 @@
             </LinearLayout>
         </RelativeLayout>
 
+        <ImageView
+            android:id="@+id/maskView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:rotation="45"
+            android:background="@drawable/mask_loading"
+
+            />
         <com.tangramfactory.smartweight.view.CircleClipView
             android:id="@+id/guage_bar"
             android:layout_width="276dp"
@@ -263,7 +272,8 @@
                 android:layout_gravity="left"
                 android:layout_marginLeft="25dp"
                 android:layout_alignParentLeft="true"
-                android:background="@drawable/selector_exercise_list_btn"/>
+                android:background="@drawable/selector_exercise_list_btn"
+                android:onClick="onViewClick"/>
 
             <ImageButton
                 android:id="@+id/next_btn"
@@ -273,7 +283,7 @@
                 android:layout_marginRight="25dp"
                 android:layout_alignParentRight="true"
                 android:background="@drawable/selector_next_btn"
-                android:onClick="onClick"
+                android:onClick="onViewClick"
                 />
         </RelativeLayout>
 

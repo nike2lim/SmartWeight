@@ -44,6 +44,11 @@ public class GuideStepAdapter extends RecyclerView.Adapter<GuideStepAdapter.List
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
+    @Override
     public ListItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.guide_step_list_item, viewGroup, false);
         return new ListItemViewHolder(itemView);

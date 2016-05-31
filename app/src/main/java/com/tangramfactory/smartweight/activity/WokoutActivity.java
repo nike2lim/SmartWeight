@@ -1,5 +1,6 @@
 package com.tangramfactory.smartweight.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -17,6 +18,7 @@ public class WokoutActivity extends BaseAppCompatActivity {
 
     ImageView mAngleNiddle;
     ImageView mGuageNiddle;
+    ImageView maskImageView;
 
 //    ImageView mAngleBar;
 //    DonutProgress mAngleBar;
@@ -48,6 +50,8 @@ public class WokoutActivity extends BaseAppCompatActivity {
 
     private Timer timer;
     protected void loadCodeView() {
+
+        maskImageView = (ImageView)findViewById(R.id.maskView);
         mAngleNiddle = (ImageView)findViewById(R.id.angle_niddle);
         mGuageNiddle = (ImageView)findViewById(R.id. guage_niddle);
 
@@ -71,10 +75,13 @@ public class WokoutActivity extends BaseAppCompatActivity {
                             mGuageBar.setClippingAngle(135);
                             mGuageBar.setStartAngle(135);
                             mGuageNiddle.setRotation(45);
+                            maskImageView.setRotation(45);
                         }
 
                         mGuageNiddle.setRotation(mGuageNiddle.getRotation()+1);
                         mGuageBar.setClippingAngle(mGuageBar.getClippingAngle() + 1);
+                        maskImageView.setRotation(maskImageView.getRotation()+1);
+
 
                         if(mAngleBar.getClippingAngle() >= 180) {
                             mAngleBar.setClippingAngle(0);
@@ -89,9 +96,11 @@ public class WokoutActivity extends BaseAppCompatActivity {
         }, 1000, 100);
     }
 
-    public void onClick(View view) {
+    public void onViewClick(View view) {
         switch (view.getId()) {
             case R.id.next_btn:
+                startActivity(new Intent(this, BreakTimeActivity.class));
+                finish();
                 break;
         }
     }

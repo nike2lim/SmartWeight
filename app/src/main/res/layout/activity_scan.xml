@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/black">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="@null">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/connect_img"
+                >
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:minHeight="?attr/actionBarSize"
+                    app:contentInsetLeft="72dp"
+                    app:contentInsetStart="72dp"
+                    app:navigationIcon="@drawable/selector_top_prev"
+                    app:theme="@style/ThemeOverlay.Custom.ActionBar"
+                    app:title="@string/title_connect_device" >
+
+
+                    <ImageButton
+                        android:id="@+id/deviceBatteryState"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/selector_toolbar_btn"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_title_connect_no" />
+                </android.support.v7.widget.Toolbar>
+
+                <com.tangramfactory.smartweight.view.RippleBackground
+                    android:id="@+id/ripplebackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:rb_color="#0099CC"
+                    app:rb_radius="32dp"
+                    app:rb_rippleAmount="6"
+                    app:rb_duration="3000"
+                    app:rb_type="strokeRipple"
+                    app:rb_strokeWidth="2px"
+                    app:rb_scale="6">
+                </com.tangramfactory.smartweight.view.RippleBackground>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:visibility="gone"
+                        android:id="@+id/connect_complete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/connect_complete" />
+
+                    <TextView
+                        android:id="@+id/text_connected"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="17sp"
+                        android:text="Connected"
+
+                        />
+
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/device_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:text="weight sensor_250923309"
+                        />
+                </LinearLayout>
+            </FrameLayout>
+    
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="28dp"
+                    android:textSize="25sp"
+
+                    android:gravity="center"
+                    android:text="Put on The 'Smart Weight' on your right wrist"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+                <Button
+                    android:id="@+id/connectButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="25dp"
+                    android:gravity="center"
+                    android:text="@string/text_start"
+                    android:textSize="22sp"
+                    android:background="@drawable/selector_btn"
+                    android:onClick="onViewClick"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:CircleIndicator="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,103 +8,150 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginTop="25dp"
-        android:layout_gravity="center"
-        android:gravity="center">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/rootLayout"
+        android:background="@drawable/level_01">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager_default"
+        <LinearLayout
+            android:id="@+id/viewPayer_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="70dp"
+            android:layout_marginTop="36dp"
+            android:layout_gravity="center"
+            android:gravity="center">
 
-    </LinearLayout>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager_default"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-<!--
-    <LinearLayout
-        android:id="@+id/indicator_default"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:background="#ff0000"
-        />
--->
-    <com.tangramfactory.smartweight.view.CircleIndicator
-        android:id="@+id/indicator_default"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_gravity="center"
-        CircleIndicator:ci_width="5dp"
-        CircleIndicator:ci_height="5dp"
-        />
-    <LinearLayout
-        android:id="@+id/day_workout_layout"
-        android:layout_width="226dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_gravity="center"
-        android:visibility="visible"
-        android:orientation="horizontal">
+        </LinearLayout>
+
+        <!--
+            <LinearLayout
+                android:id="@+id/indicator_default"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:background="#ff0000"
+                />
+        -->
+        <com.tangramfactory.smartweight.view.CircleIndicator
+            android:id="@+id/indicator_default"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="9dp"
+            android:layout_gravity="center"
+            CircleIndicator:ci_width="5dp"
+            CircleIndicator:ci_height="5dp"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/oneday_text"
-                android:layout_width="74dp"
-                android:layout_height="wrap_content"
-                android:text="1 Day"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/lock_screen_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:gravity="center"
-                android:textSize="12sp"
-                android:textColor="@color/white"
-                android:background="@drawable/days_sel"/>
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <TextView
-                android:id="@+id/twoday_text"
-                android:layout_width="74dp"
-                android:layout_height="wrap_content"
-                android:text="2 Day"
-                android:textColor="#aaaaaa"
-                android:textSize="12sp"
-                android:gravity="center"
-                />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/icn_lock"/>
 
-            <TextView
-                android:id="@+id/threeday_text"
-                android:layout_width="74dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="22dp"
+                    android:gravity="center"
+                    android:textSize="23sp"
+                    android:textColor="#b4b4b4"
+                    android:text="You must complete \nLevel 03"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/day_workout_layout"
+                android:layout_width="226dp"
                 android:layout_height="wrap_content"
-                android:text="3 Day"
-                android:textColor="#aaaaaa"
-                android:textSize="12sp"
-                android:gravity="center"
-                />
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/oneday_text"
+                        android:layout_width="74dp"
+                        android:layout_height="wrap_content"
+                        android:text="1 Day"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        android:background="@drawable/days_sel"
+                        android:onClick="onViewClick"/>
+
+                    <TextView
+                        android:id="@+id/twoday_text"
+                        android:layout_width="74dp"
+                        android:layout_height="wrap_content"
+                        android:text="2 Day"
+                        android:textColor="#aaaaaa"
+                        android:textSize="12sp"
+                        android:gravity="center"
+                        android:onClick="onViewClick"
+                        />
+
+                    <TextView
+                        android:id="@+id/threeday_text"
+                        android:layout_width="74dp"
+                        android:layout_height="wrap_content"
+                        android:text="3 Day"
+                        android:textColor="#aaaaaa"
+                        android:textSize="12sp"
+                        android:gravity="center"
+                        android:onClick="onViewClick"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/day_exercise_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    layout="@layout/daylayout"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/stepListLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="bottom"
+                    android:visibility="gone"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/guide_step_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" >
+                    </android.support.v7.widget.RecyclerView>
+
+                </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
-
-
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        layout="@layout/daylayout"
-        android:visibility="gone" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:visibility="visible"
-        android:orientation="vertical">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/guide_step_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        </android.support.v7.widget.RecyclerView>
-
-
-    </LinearLayout>
-
-
 </LinearLayout>

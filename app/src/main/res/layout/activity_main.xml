@@ -16,7 +16,7 @@
         app:contentInsetStart="72dp"
         app:navigationIcon="@drawable/selector_top_setting"
         app:theme="@style/ThemeOverlay.Custom.ActionBar"
-        app:title="@string/guide_training" >
+        app:title="@string/title_guide_training" >
 
 
         <ImageButton
@@ -46,9 +46,11 @@
 
             <TabWidget
                 android:id="@android:id/tabs"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:background="@color/white"
+                android:showDividers="middle"
+                android:divider="@drawable/tab_divider"
                 android:layout_alignParentBottom="true"/>
 
             <FrameLayout
@@ -64,7 +66,7 @@
                     android:orientation="vertical">
 
                 </LinearLayout>
-        </FrameLayout>
+            </FrameLayout>
         </RelativeLayout>
     </TabHost>
 

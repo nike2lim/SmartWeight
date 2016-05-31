@@ -30,4 +30,9 @@ public class ProgressFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
     }
+
+    public void onViewClick(View view) {
+        switch (view.getId()) {
+        }
+    }
 }

@@ -194,7 +194,7 @@ public class WorkoutPreviewActivity extends BaseAppCompatActivity implements Vie
         return size;
     }
 
-    public void onClick(View view) {
+    public void onViewClick(View view) {
         switch(view.getId()) {
             case R.id.videoPlayButton:
                 startActivity(new Intent(this, VideoPlayerActivity.class));

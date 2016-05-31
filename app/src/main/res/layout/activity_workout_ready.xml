@@ -17,7 +17,7 @@
         app:contentInsetLeft="72dp"
         app:contentInsetStart="72dp"
         app:theme="@style/ThemeOverlay.Custom.ActionBar"
-        app:title="@string/guide_training" >
+        app:title="@string/title_guide_training" >
 
 
         <ImageButton

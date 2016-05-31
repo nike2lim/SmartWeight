@@ -32,17 +32,34 @@
             android:theme="@style/AppThemeFullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.WorkoutPreviewActivity" />
-        <activity android:name=".activity.VideoPlayerActivity" />
-        <activity android:name=".activity.WokoutActivity" />
-        <activity android:name=".activity.WorkoutReadyActivity"></activity>
+        <activity android:name=".activity.WorkoutPreviewActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.VideoPlayerActivity"
+            android:configChanges="keyboardHidden|orientation"
+            />
+        <activity android:name=".activity.WokoutActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".activity.WorkoutReadyActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.ScanActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.BreakTimeActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.WorkoutResultActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

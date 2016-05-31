@@ -2,7 +2,9 @@
     <string name="app_name">SmartWeight</string>
 
     <string name="title_main">SMART Weight</string>
-    <string name="guide_training">Guide Training</string>
+    <string name="title_guide_training">Guide Training</string>
+    <string name="title_connect_device">Connect Device</string>
+
     <string name="blnak"></string>
 
     <string name="level1">LEVEL 01</string>
@@ -43,9 +45,19 @@
 
     <string name="text_dumbell">DUMBELL</string>
     <string name="text_start">START</string>
+    <string name="text_connect">CONNECT</string>
 
 
     <string name="text_underarmour">UA Record<font size="8"><sup>(TM)</sup></font></string>
     <string name="text_angle">30<font size="10"><sup>o</sup></font></string>
+
+    <string name="text_biceps"><u>BICEPS CURLS</u></string>
+
+
+    <string name="text_set">Set</string>
+    <string name="text_total">Total</string>
+
+
+    <string name="text_share">Share</string>
 
 </resources>

@@ -1,18 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:orientation="vertical">
 
 
-    <TextView
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <SurfaceView
+        android:id="@+id/surfaceview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="30sp"
-        android:text="VideoPlayerActivity"
+        android:background="@color/transparent"
+        android:minHeight="?attr/actionBarSize"
+        app:contentInsetLeft="72dp"
+        app:contentInsetStart="72dp"
+        app:theme="@style/ThemeOverlay.Custom.ActionBar"
+        app:title="Bench Press" >
 
-        />
+
+        <ImageButton
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="10dp"
+            android:background="@color/transparent"
+            android:padding="10dp"
+            android:src="@drawable/selector_top_info" />
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/control_layout"
+        android:layout_width="match_parent"
+        android:layout_height="98dp"
+        android:layout_gravity="bottom"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+        android:padding="0dp"
+        android:background="@color/black_70"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/play_pause_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:background="@drawable/selector_play_btn"/>
+
+        <SeekBar
+            android:id="@+id/seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="25dp"
+            android:maxHeight="3dp"
+            android:progressDrawable="@drawable/seekbar_drawable"
+            android:thumb="@drawable/seekbar_thumb"/>
+    </LinearLayout>
+
+    </FrameLayout>
 
 </LinearLayout>

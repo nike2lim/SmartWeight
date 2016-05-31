@@ -17,18 +17,14 @@ public class ConnReceiver extends BroadcastReceiver {
 			ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 			NetworkInfo mobNetInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-//			Toast.makeText(context, "Active Network Type : " + activeNetInfo.getTypeName(), Toast.LENGTH_SHORT).show();
-//			Toast.makeText(context, "Mobile Network Type : " + mobNetInfo.getTypeName(), Toast.LENGTH_SHORT).show();
 
 			ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo mobile = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 			NetworkInfo wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 			if ((null != mobile && mobile.isConnected()) || wifi.isConnected()) {
-//				Log.d(TAG, "Network connect success");
-				DebugLogger.d("SmartGym", "Network connect success");
+				DebugLogger.d("SmartWeight", "Network connect success");
 			} else {
-//				Log.d(TAG, "Network connect fail");
-				DebugLogger.d("SmartGym", "Network connect fail");
+				DebugLogger.d("SmartWeight", "Network connect fail");
 			}
 		}
 	}

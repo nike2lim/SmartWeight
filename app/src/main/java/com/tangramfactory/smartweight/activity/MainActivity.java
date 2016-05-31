@@ -2,8 +2,12 @@ package com.tangramfactory.smartweight.activity;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.gesture.Gesture;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,16 +16,19 @@ import android.widget.TabHost;
 import com.tangramfactory.smartweight.R;
 import com.tangramfactory.smartweight.SmartWeightApplication;
 import com.tangramfactory.smartweight.activity.base.BaseAppCompatActivity;
+import com.tangramfactory.smartweight.utility.DebugLogger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends BaseAppCompatActivity  {
+public class MainActivity extends BaseAppCompatActivity  implements GestureDetector.OnGestureListener{
     protected static final String TAG = SmartWeightApplication.BASE_TAG + "MainActivity";
 
     public Toolbar toolbar;
     private TabHost mTabHost;
+    GestureDetector mGesDetector;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,31 +36,26 @@ public class MainActivity extends BaseAppCompatActivity  {
         setContentView(R.layout.activity_main);
         setToolbar();
         loadCodeView();
-//        loadCodeView3();
     }
 
     private void setToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_top_setting);
         toolbar.setTitle(R.string.title_main);
-//        toolbar.setBackgroundColor(getResources().getColor(R.color.main_top));
         toolbar.findViewById(R.id.deviceBatteryState).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(mContext, DeviceSettingActivity.class));
+                startActivity(new Intent(mContext, ScanActivity.class));
             }
         });
         setSupportActionBar(toolbar);
     }
 
     private void loadCodeView() {
+        mGesDetector = new GestureDetector(mContext, this);
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup();
-        mTabHost.getTabWidget().setShowDividers(LinearLayout.SHOW_DIVIDER_BEGINNING);
-
-
-        //Creating tab menu.
         TabHost.TabSpec tabMenu1 = mTabHost.newTabSpec("Guide");
         TabHost.TabSpec tabMenu2 = mTabHost.newTabSpec("Self");
         TabHost.TabSpec tabMenu3 = mTabHost.newTabSpec("Record");
@@ -130,14 +132,12 @@ public class MainActivity extends BaseAppCompatActivity  {
                         ft.add(R.id.realtabcontent,new GuideFragment(), "Guide");
                     }else{
                         ft.attach(guideFragment);
-//                        ft.replace(R.id.realtabcontent, guideFragment);
                     }
 
                 }else if(tabId.equalsIgnoreCase("Self")) {
                     if(selfFragment==null){
                         ft.add(R.id.realtabcontent,new SelfFragment(), "Self");
                     }else{
-//                        ft.replace(R.id.realtabcontent, selfFragment);
                         ft.attach(selfFragment);
                     }
 
@@ -145,14 +145,12 @@ public class MainActivity extends BaseAppCompatActivity  {
                     if(recordFragment==null){
                         ft.add(R.id.realtabcontent,new RecordFragment(), "Record");
                     }else{
-//                        ft.replace(R.id.realtabcontent, recordFragment);
                         ft.attach(recordFragment);
                     }
                 }else{
                     if(progressFragment==null){
                         ft.add(R.id.realtabcontent,new ProgressFragment(), "Progress");
                     }else{
-//                        ft.replace(R.id.realtabcontent, progressFragment);
                         ft.attach(progressFragment);
                     }
                 }
@@ -174,5 +172,72 @@ public class MainActivity extends BaseAppCompatActivity  {
             View v = new View(mContext);
             return v;
         }
+    }
+
+    public void onViewClick(View v) {
+        String tabTag = mTabHost.getCurrentTabTag();
+        android.support.v4.app.FragmentManager fm =   getSupportFragmentManager();
+
+        if(tabTag.equals("Guide")) {
+            GuideFragment guideFragment = (GuideFragment) fm.findFragmentByTag("Guide");
+            guideFragment.onViewClick(v);
+        }else if(tabTag.equals("Self")) {
+            SelfFragment selfFragment = (SelfFragment) fm.findFragmentByTag("Self");
+            selfFragment.onViewClick(v);
+        }else if(tabTag.equals("Record")) {
+            RecordFragment recordFragment = (RecordFragment) fm.findFragmentByTag("Record");
+            recordFragment.onViewClick(v);
+        }else if(tabTag.equals("Progress")) {
+            ProgressFragment progressFragment = (ProgressFragment) fm.findFragmentByTag("Progress");
+            progressFragment.onViewClick(v);
+        }else {
+
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return mGesDetector.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        DebugLogger.d(TAG, "GuideFragment onDown!");
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+        DebugLogger.d(TAG, "GuideFragment onShowPress!");
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        DebugLogger.d(TAG, "GuideFragment onSingleTapUp!");
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        DebugLogger.d(TAG, "GuideFragment onScroll!");
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+        DebugLogger.d(TAG, "GuideFragment onLongPress!");
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        DebugLogger.d(TAG, "GuideFragment onFling!");
+        String tabTag = mTabHost.getCurrentTabTag();
+        android.support.v4.app.FragmentManager fm =   getSupportFragmentManager();
+
+        if(tabTag.equals("Guide")) {
+            GuideFragment guideFragment = (GuideFragment) fm.findFragmentByTag("Guide");
+            guideFragment.onFling(e1,e2,velocityX, velocityY);
+        }
+        return false;
     }
 }

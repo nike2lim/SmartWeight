@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="98.5dp"
+    android:layout_height="105dp"
     android:background="#000000"
     android:clickable="true"
     android:orientation="horizontal" >
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:text="STEP"
                 android:textColor="@color/white_50"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/step_count"
@@ -43,7 +43,7 @@
                 android:layout_marginTop="3dp"
                 android:text="01"
                 android:textColor="@color/white"
-                android:textSize="40sp"
+                android:textSize="60sp"
                 android:textStyle="bold"/>
 
         </LinearLayout>
@@ -88,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:textColor="@color/white_80"
             android:text="10"
             />
@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
-            android:textSize="20sp"
+            android:textSize="13sp"
             android:textColor="@color/white_80"
             android:text="REPS"
             />
@@ -111,7 +111,7 @@
         android:layout_height="1.5dp"
         android:layout_weight="1"
         android:layout_gravity="bottom"
-        android:background="@color/white"
+        android:background="@drawable/white_10"
         android:orientation="vertical"/>
     </LinearLayout>
 </LinearLayout>

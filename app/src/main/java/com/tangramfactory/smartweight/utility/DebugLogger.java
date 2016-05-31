@@ -22,10 +22,10 @@
 package com.tangramfactory.smartweight.utility;
 
 import android.os.Environment;
-import android.support.graphics.drawable.animated.BuildConfig;
 import android.util.Log;
 
 
+import com.tangramfactory.smartweight.BuildConfig;
 
 import java.io.BufferedWriter;
 import java.io.File;

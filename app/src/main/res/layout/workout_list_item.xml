@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#000000"
+    android:clickable="true"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/rootLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/exercise_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="13dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:textSize="21sp"
+            android:textColor="@color/white"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Bench Press"/>
+
+
+        <TextView
+            android:id="@+id/text_progress"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="33sp"
+            android:textColor="#43b4f7"
+            android:text="80"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="20dp"
+            android:textSize="23sp"
+            android:textColor="#43b4f7"
+            android:text="%"/>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="333dp"
+        android:layout_height="2dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginRight="13dp"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:progressDrawable="@drawable/progress_drawable"
+        android:progress="80"
+        android:max="100"
+
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="13dp"
+        android:paddingRight="13dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="28dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="13dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:textSize="10sp"
+                android:textColor="@color/white_30"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/text_set"/>
+
+            <TextView
+                android:layout_width="63dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:textColor="@color/white_30"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="kg"/>
+
+            <TextView
+                android:layout_width="63dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="13dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:textColor="@color/white_30"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="reps"/>
+
+            <TextView
+                android:layout_width="63dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="10sp"
+                android:textColor="@color/white_30"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="accuracy"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/set1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/workout_list_item_set"
+         />
+
+    <include
+        android:id="@+id/set2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/workout_list_item_set"
+        />
+
+    <include
+        android:id="@+id/set3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/workout_list_item_set"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="26dp"
+        android:paddingRight="26dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/text_rest_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:textSize="10sp"
+            android:textColor="@color/white_30"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Rest Time:"/>
+
+
+        <TextView
+            android:id="@+id/rest_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:textSize="10sp"
+            android:textColor="@color/white"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="5min"/>
+
+
+        <TextView
+            android:id="@+id/text_total_time"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:textSize="10sp"
+            android:textColor="@color/white_30"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Total Time:"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_gravity="center"
+            android:gravity="left"
+            android:textSize="10sp"
+            android:textColor="@color/white"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="5min"/>
+
+
+    </LinearLayout>
+</LinearLayout>
