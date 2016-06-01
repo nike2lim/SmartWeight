@@ -60,6 +60,10 @@ public class WokoutActivity extends BaseAppCompatActivity {
         mGuageBar = (CircleClipView)findViewById(R.id.guage_bar);
         mAngleBar = (CircleClipView)findViewById(R.id.angle_bar);
 
+
+        mGuageBar.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        mAngleBar.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+
 //        mGuageBar.setClippingAngle(135);
 //        mGuageNiddle.setRotation(60);
 

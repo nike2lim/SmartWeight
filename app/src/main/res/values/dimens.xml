@@ -9,6 +9,8 @@
     <dimen name="rippleRadius">64dp</dimen>
     <dimen name="rippleStrokeWidth">2px</dimen>
 
-    tab_divider_vertical_padding
+
+    <dimen name="min_height_header">185dp</dimen>
+
     <dimen name="tab_divider_vertical_padding">2px</dimen>
 </resources>

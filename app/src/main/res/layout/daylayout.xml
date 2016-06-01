@@ -18,10 +18,12 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/exercise_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_weight="1"
+                android:onClick="onViewClick"
                 android:orientation="vertical">
 
                 <ImageView
@@ -45,10 +47,12 @@
 
 
             <LinearLayout
+                android:id="@+id/exercise_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_weight="1"
+                android:onClick="onViewClick"
                 android:orientation="vertical">
 
                 <ImageView
@@ -72,10 +76,12 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/exercise_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="onViewClick"
                 android:orientation="vertical">
                 <ImageView
                     android:layout_width="wrap_content"
@@ -106,12 +112,14 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/exercise_4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="0dp"
                 android:padding="0dp"
                 android:gravity="center"
                 android:layout_weight="1"
+                android:onClick="onViewClick"
                 android:orientation="vertical">
 
                 <ImageView
@@ -135,10 +143,12 @@
 
 
             <LinearLayout
+                android:id="@+id/exercise_5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_weight="1"
+                android:onClick="onViewClick"
                 android:orientation="vertical">
 
                 <ImageView
@@ -162,10 +172,12 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/exercise_6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="onViewClick"
                 android:orientation="vertical">
                 <ImageView
                     android:layout_width="wrap_content"

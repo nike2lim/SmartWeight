@@ -220,6 +220,13 @@ public class MainActivity extends BaseAppCompatActivity  implements GestureDetec
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         DebugLogger.d(TAG, "GuideFragment onScroll!");
+        String tabTag = mTabHost.getCurrentTabTag();
+        android.support.v4.app.FragmentManager fm =   getSupportFragmentManager();
+
+        if(tabTag.equals("Guide")) {
+            GuideFragment guideFragment = (GuideFragment) fm.findFragmentByTag("Guide");
+            guideFragment.onScroll(e1,e2,distanceX, distanceY);
+        }
         return false;
     }
 
