@@ -60,4 +60,7 @@
 
     <string name="text_share">Share</string>
 
+
+    <string name="text_device_firmware_decription">Do not power off your mobile\nuntil this update is complete.\n\nDo not operate SMART ROPE\nduring this update process.</string>
+    <string name="title_device_firmware_update">Firmware Update</string>
 </resources>

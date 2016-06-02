@@ -1,0 +1,14 @@
+[
+    {
+        "merged": "C:\\StudioWorkspace\\SmartWeight\\smartRopeDeviceFirmwareUpdate\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\ic_action_notify_cancel.png",
+        "source": "C:\\StudioWorkspace\\SmartWeight\\smartRopeDeviceFirmwareUpdate\\src\\main\\res\\drawable-xhdpi\\ic_action_notify_cancel.png"
+    },
+    {
+        "merged": "C:\\StudioWorkspace\\SmartWeight\\smartRopeDeviceFirmwareUpdate\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\ic_stat_notify_dfu.png",
+        "source": "C:\\StudioWorkspace\\SmartWeight\\smartRopeDeviceFirmwareUpdate\\src\\main\\res\\drawable-xhdpi\\ic_stat_notify_dfu.png"
+    },
+    {
+        "merged": "C:\\StudioWorkspace\\SmartWeight\\smartRopeDeviceFirmwareUpdate\\build\\intermediates\\res\\merged\\release\\drawable-xhdpi-v4\\ic_launcher.png",
+        "source": "C:\\StudioWorkspace\\SmartWeight\\smartRopeDeviceFirmwareUpdate\\src\\main\\res\\drawable-xhdpi\\ic_launcher.png"
+    }
+]

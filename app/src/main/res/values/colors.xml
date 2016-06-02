@@ -28,7 +28,7 @@
 
     <color name="text_pressed">#B2B2B2</color>
 
-
+    <color name="point_color">#ff52d4</color>
 
     <color name="result_progress">#44c0f4</color>
     <color name="result_progress_bg">#061F2E</color>
