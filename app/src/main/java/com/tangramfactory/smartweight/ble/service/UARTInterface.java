@@ -26,4 +26,5 @@ package com.tangramfactory.smartweight.ble.service;
 public interface UARTInterface {
 
 	public void send(final String text);
+	public void send(final byte[] request);
 }

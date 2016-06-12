@@ -9,6 +9,12 @@ import android.view.View;
 public class GuideHeadBehavior extends CoordinatorLayout.Behavior {
 
     @Override
+    public boolean onLayoutChild(CoordinatorLayout parent, View child, int layoutDirection) {
+        return super.onLayoutChild(parent, child, layoutDirection);
+
+    }
+
+    @Override
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, View child, View target, int dx, int dy, int[] consumed) {
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed);
     }

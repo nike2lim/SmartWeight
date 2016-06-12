@@ -93,6 +93,7 @@ public class WorkoutSetResultAdapter extends HeaderRecyclerViewAdapter implement
     @Override
     public RecyclerView.ViewHolder onCreateBasicItemViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.workout_list_item, parent, false);
+
         return new ListItemViewHolder(itemView);
     }
 
@@ -102,19 +103,31 @@ public class WorkoutSetResultAdapter extends HeaderRecyclerViewAdapter implement
         ArrayList<GuideResultVo.SetInfo> infoList = model.getSetInfoList();
 
         ListItemViewHolder listItemViewHolder = (ListItemViewHolder)holder;
-        listItemViewHolder.exerciseType.setText(model.getExerciseType());
+        listItemViewHolder.exerciseType.setText(model.getExerciseName());
         listItemViewHolder.progressText.setText(String.valueOf(model.getProgress()));
         listItemViewHolder.progressBar.setProgress(model.getProgress());
+        listItemViewHolder.restTime.setText(model.getRestTime());
+        listItemViewHolder.totalTime.setText(model.getTotalTime());
 
         if(null != infoList) {
 //            for(GuideResultVo.SetInfo info : infoList) {
-            for(int i=0; i < 3; i++) {
+            for(int i=0; i < infoList.size(); i++) {
                 GuideResultVo.SetInfo info = infoList.get(i);
-                listItemViewHolder.setCountText[i].setText(info.getSetNum());
-                listItemViewHolder.weightText[i].setText(info.getWeight() + info.getWeightUnit());
+                listItemViewHolder.weightUnit.setText(info.getWeightUnit());
+
+
+                listItemViewHolder.setCountText[i].setText(info.getSetNum() + " set");
+
+                listItemViewHolder.weightText[i].setText(info.getWeight());
                 listItemViewHolder.repsPerTotalText[i].setText(info.getResultReps() + "/" + info.getTotalReps());
                 listItemViewHolder.accuracyText[i].setText(info.getAccuracy());
+            }
 
+            if(infoList.size() == 1) {
+                listItemViewHolder.itemView.findViewById(R.id.set2).setVisibility(View.GONE);
+                listItemViewHolder.itemView.findViewById(R.id.set3).setVisibility(View.GONE);
+            }else if(infoList.size() == 2)  {
+                listItemViewHolder.itemView.findViewById(R.id.set3).setVisibility(View.GONE);
             }
         }
     }
@@ -176,6 +189,9 @@ public class WorkoutSetResultAdapter extends HeaderRecyclerViewAdapter implement
 
         TextView exerciseType;
         TextView progressText;
+        TextView weightUnit;
+        TextView restTime;
+        TextView totalTime;
         TextView[] setCountText = new TextView[3];
         TextView[] weightText = new TextView[3];
         TextView[] repsPerTotalText  = new TextView[3];
@@ -188,6 +204,9 @@ public class WorkoutSetResultAdapter extends HeaderRecyclerViewAdapter implement
             exerciseType = (TextView)itemView.findViewById(R.id.exercise_type);
             progressText = (TextView)itemView.findViewById(R.id.text_progress);
             progressBar = (ProgressBar)itemView.findViewById(R.id.progressBar);
+            weightUnit = (TextView)itemView.findViewById(R.id.weightunit);
+            restTime = (TextView)itemView.findViewById(R.id.rest_time);
+            totalTime = (TextView)itemView.findViewById(R.id.total_time);
 
             Context context = itemView.getContext();
 

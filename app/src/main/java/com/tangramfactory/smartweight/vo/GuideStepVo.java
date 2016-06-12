@@ -1,5 +1,8 @@
 package com.tangramfactory.smartweight.vo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Shlim on 2016-05-24.
  */
@@ -10,15 +13,17 @@ public class GuideStepVo {
     String mBageCount;
     String mRepsCount;
 
-    int excerciseCount;
-    String[] exerciseList;
+    ArrayList<WorkoutVo> mWorkoutList = new ArrayList<WorkoutVo>();
 
-    public GuideStepVo(String stepCount, String bageCount, String repsCount, boolean isCurrentStep) {
+    public GuideStepVo(String stepCount, String bageCount, String repsCount, boolean isCurrentStep, List<WorkoutVo> list) {
         mStepCount = stepCount;
         mBageCount = bageCount;
         mRepsCount = repsCount;
         mIsCurrentStep = isCurrentStep;
+
+        mWorkoutList.addAll(list);
     }
+
 
     public String getStepCount() {
         return mStepCount;
@@ -36,6 +41,8 @@ public class GuideStepVo {
         return mIsCurrentStep;
     }
 
-
+    public ArrayList<WorkoutVo> getWorkoutVo() {
+        return mWorkoutList;
+    }
 
 }

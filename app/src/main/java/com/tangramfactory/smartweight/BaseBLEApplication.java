@@ -1,7 +1,6 @@
 package com.tangramfactory.smartweight;
 
 
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -12,7 +11,6 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.multidex.MultiDexApplication;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.ViewDebug;
 
 import com.tangramfactory.smartweight.activity.device.CmdConst;
 import com.tangramfactory.smartweight.ble.scanner.BootloaderScanner;
@@ -50,16 +48,55 @@ public class BaseBLEApplication<E extends BleProfileService.LocalBinder> extends
     }
 
     byte[] requestBuffer = new byte[CmdConst.REQUEST_CMD_SIZE];
-    public void send(byte cmd, byte[] sequenceNum ) {
+
+    public void send(byte cmd, byte cmdLen, byte[] payload) {
         Arrays.fill( requestBuffer, (byte) 0);
+        byte[] commandByte = new byte[3 + cmdLen + 1];
 
-        byte req = (byte)(1<<7);
-        req = (byte)(req|cmd);
-        requestBuffer[0] = req;
+        byte req = (byte)(0<<7);
+        byte reqCmd = (byte) ((byte)cmd & CmdConst.MASK_COMMAND);
+        req = (byte)(req|reqCmd);
+        commandByte[0] = req;
 
-        DebugLogger.d(TAG, "send comd = " + Integer.toBinaryString(requestBuffer[0]));
+        DebugLogger.d(TAG, "send comd = " + Integer.toBinaryString(commandByte[0]));
 
-        byte dd = (byte)(5&CmdConst.MASK_COMMAND);
+
+        commandByte[2] = (byte)(commandByte[2]|cmdLen);
+//        arraycopy(Object src, int srcPos,
+//        Object dst, int dstPos, int length);
+        if(null != payload && cmdLen > 0 ) {
+            System.arraycopy(payload,0, commandByte, 3, cmdLen);
+        }
+
+        byte cheksum = 0;
+        for(int i=0; i< commandByte.length; i++) {
+            cheksum = (byte) (cheksum + commandByte[i]);
+        }
+
+        commandByte[commandByte.length-1] = cheksum;
+
+//        requestBuffer[19] = 0;
+
+        if (mServiceBinder != null && mServiceBinder.isConnected())
+            mServiceBinder.send(commandByte);
+
+        //req[1] : sequence Number
+        //req[2] : sequence Number(5bit) & cmd length(3bit)
+
+
+        //req[3]
+        //req[4]
+        //req[5]
+        //req[6]
+        //req[7]
+        //req[8]
+        //req[9]
+        //req[10]
+        //req[11]
+        //req[12]
+
+        //req[18]   payload
+        //req[19] checksum
 
     }
 
@@ -255,20 +292,20 @@ public class BaseBLEApplication<E extends BleProfileService.LocalBinder> extends
     public void onDeviceDisconnecting() {
         SmartWeightApplication.batteryState = 0;
         initDeviceData();
-        if (!isDFU) {
-            if (BluetoothAdapter.getDefaultAdapter() != null && BluetoothAdapter.getDefaultAdapter().isEnabled())
-                startScan(BootloaderScanner.SCAN_MODE_TARGET);
-        }
+//        if (!isDFU) {
+//            if (BluetoothAdapter.getDefaultAdapter() != null && BluetoothAdapter.getDefaultAdapter().isEnabled())
+//                startScan(BootloaderScanner.SCAN_MODE_RSSI);
+//        }
     }
 
     @Override
     public void onDeviceDisconnected() {
         SmartWeightApplication.batteryState = 0;
         initDeviceData();
-        if (!isDFU) {
-            if (BluetoothAdapter.getDefaultAdapter() != null && BluetoothAdapter.getDefaultAdapter().isEnabled())
-                startScan(BootloaderScanner.SCAN_MODE_TARGET);
-        }
+//        if (!isDFU) {
+//            if (BluetoothAdapter.getDefaultAdapter() != null && BluetoothAdapter.getDefaultAdapter().isEnabled())
+//                startScan(BootloaderScanner.SCAN_MODE_RSSI);
+//        }
     }
 
     @Override

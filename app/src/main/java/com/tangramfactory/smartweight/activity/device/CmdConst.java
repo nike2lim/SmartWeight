@@ -6,7 +6,19 @@ package com.tangramfactory.smartweight.activity.device;
 public class CmdConst {
     public final static byte REQUEST_CMD_SIZE            = 20;
 
-    public final static byte CMD_UUID                       = 0x01;
+    public final static byte CMD_REQUEST_UUID               = 1;
+    public final static byte CMD_REQUEST_START              = 10;
+    public final static byte CMD_REQUEST_BREAK              = 11;
+    public final static byte CMD_REQUEST_STOP               = 12;
+
+
+    public final static byte CMD_RESPONSE_BATTERY           = 4;
+    public final static byte CMD_RESPONSE_COUNT_DATA        = 8;
+    public final static byte CMD_RESPONSE_ANGLE_DATA        = 9;
+
+    public final static byte CMD_RESPONSE_BREAKTIME_DATA    = 11;
+
+
     public final static byte CMD_DEVIDE_VERSION             = 0x02;
     public final static byte CMD_DEVIDE_NAME                = 0x03;
     public final static byte CMD_DEVIDE_BATTERY_INFO        = 0x04;

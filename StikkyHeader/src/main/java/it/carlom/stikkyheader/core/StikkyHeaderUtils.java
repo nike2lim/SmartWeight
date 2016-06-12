@@ -39,7 +39,7 @@ public class StikkyHeaderUtils {
     public static void setOnTouchListenerOnHeader(@NonNull View header, @Nullable View scrollingView, @Nullable final View.OnTouchListener onTouchListenerOnHeaderDelegate, final boolean allowTouchBehindHeader) {
 
         if (scrollingView == null || allowTouchBehindHeader) {
-            if (onTouchListenerOnHeaderDelegate != null) {
+            if (null != header && onTouchListenerOnHeaderDelegate != null) {
                 header.setOnTouchListener(onTouchListenerOnHeaderDelegate);
             }
             return;

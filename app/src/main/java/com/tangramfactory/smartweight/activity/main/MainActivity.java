@@ -8,14 +8,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TabHost;
 
 import com.tangramfactory.smartweight.R;
 import com.tangramfactory.smartweight.SmartWeightApplication;
-import com.tangramfactory.smartweight.activity.device.ScanActivity;
 import com.tangramfactory.smartweight.activity.base.BaseAppCompatActivity;
+import com.tangramfactory.smartweight.activity.device.ScanActivity;
 import com.tangramfactory.smartweight.utility.DebugLogger;
+import com.tangramfactory.smartweight.utility.SmartWeightUtility;
+import com.tangramfactory.smartweight.utility.UUIDCryptoUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +30,7 @@ public class MainActivity extends BaseAppCompatActivity  implements GestureDetec
     public Toolbar toolbar;
     private TabHost mTabHost;
     GestureDetector mGesDetector;
-
+    ImageButton deviceBatteryStateImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +48,16 @@ public class MainActivity extends BaseAppCompatActivity  implements GestureDetec
 
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(mContext, ScanActivity.class));
+                Intent intent = new Intent(mContext, ScanActivity.class);
+                intent.putExtra("isUpdate", true);
+                startActivity(intent);
             }
         });
         setSupportActionBar(toolbar);
     }
 
     private void loadCodeView() {
+        deviceBatteryStateImage = (ImageButton) findViewById(R.id.deviceBatteryState);
         mGesDetector = new GestureDetector(mContext, this);
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup();
@@ -157,6 +163,16 @@ public class MainActivity extends BaseAppCompatActivity  implements GestureDetec
             }
         });
 
+        if (!UUIDCryptoUtils.hasUUIDFile()) {
+            UUIDCryptoUtils.makeDeviceUUID();
+        }
+    }
+
+
+    @Override
+    protected void onResume() {
+        deviceBatteryStateImage.setImageResource(SmartWeightUtility.getBatteryIconState(mApplication.isConnected(), SmartWeightApplication.batteryState));
+        super.onResume();
     }
 
     public class DummyTabContent implements TabHost.TabContentFactory {
@@ -224,7 +240,7 @@ public class MainActivity extends BaseAppCompatActivity  implements GestureDetec
 
         if(tabTag.equals("Guide")) {
             GuideFragment guideFragment = (GuideFragment) fm.findFragmentByTag("Guide");
-            guideFragment.onScroll(e1,e2,distanceX, distanceY);
+//            guideFragment.onScroll(e1,e2,distanceX, distanceY);
         }
         return false;
     }
@@ -242,8 +258,38 @@ public class MainActivity extends BaseAppCompatActivity  implements GestureDetec
 
         if(tabTag.equals("Guide")) {
             GuideFragment guideFragment = (GuideFragment) fm.findFragmentByTag("Guide");
-            guideFragment.onFling(e1,e2,velocityX, velocityY);
+//            guideFragment.onFling(e1,e2,velocityX, velocityY);
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.applicationExit();
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDeviceReady() {
+        deviceBatteryStateImage.setImageResource(SmartWeightUtility.getBatteryIconState(mApplication.isConnected(), SmartWeightApplication.batteryState));
+        super.onDeviceReady();
+    }
+
+    @Override
+    protected void onDeviceDisconnected() {
+        deviceBatteryStateImage.setImageResource(SmartWeightUtility.getBatteryIconState(mApplication.isConnected(), SmartWeightApplication.batteryState));
+        super.onDeviceDisconnected();
+    }
+
+    @Override
+    protected void onDeviceLinkLoss() {
+        deviceBatteryStateImage.setImageResource(SmartWeightUtility.getBatteryIconState(mApplication.isConnected(), SmartWeightApplication.batteryState));
+        super.onDeviceLinkLoss();
+    }
+
+    @Override
+    protected void onDeviceConnected() {
+        deviceBatteryStateImage.setImageResource(SmartWeightUtility.getBatteryIconState(mApplication.isConnected(), SmartWeightApplication.batteryState));
+        super.onDeviceConnected();
     }
 }

@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="THIS IS TAB 4 SCREEN"
+        android:text="Progress"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

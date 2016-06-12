@@ -86,6 +86,10 @@ public abstract class StikkyHeaderBuilder {
         return this;
     }
 
+    public HeaderAnimator getHeaderAnimator() {
+        return mAnimator;
+    }
+
     /**
      * Allows the touch of the views behind the StikkyHeader. by default is false
      *

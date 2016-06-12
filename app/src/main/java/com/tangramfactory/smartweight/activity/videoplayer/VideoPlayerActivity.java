@@ -135,7 +135,7 @@ public class VideoPlayerActivity extends BaseAppCompatActivity implements Surfac
 
         mPlayUri = uri;
         if(null == uri) {
-            mPlayUri = Uri.parse("android.resource://" + getPackageName() + "/"+R.raw.bench_press);
+//            mPlayUri = Uri.parse("android.resource://" + getPackageName() + "/"+R.raw.bench_press);
         }
 
         taskDelay = new Handler();

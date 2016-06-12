@@ -15,6 +15,13 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.tangramfactory.smartweight.R;
 import com.tangramfactory.smartweight.SmartWeightApplication;
 import com.tangramfactory.smartweight.activity.base.BaseAppCompatActivity;
+import com.tangramfactory.smartweight.activity.device.CmdConst;
+
+import org.joda.time.DateTime;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class WorkoutResultActivity extends BaseAppCompatActivity {
 
@@ -23,6 +30,11 @@ public class WorkoutResultActivity extends BaseAppCompatActivity {
     ViewPager viewPager;
     FragmentPagerItems pages;
     FragmentPagerItemAdapter adapter;
+
+    protected DateTime currentDate = DateTime.now();
+    protected Date currDate = new Date();
+
+    private SimpleDateFormat simpleDateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +46,18 @@ public class WorkoutResultActivity extends BaseAppCompatActivity {
 
     private void setToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        String displayDay;
+
+        simpleDateFormat =  new SimpleDateFormat(getString(R.string.text_diplay_date), Locale.getDefault());
+        displayDay = simpleDateFormat.format(currDate);
+
+//        DateTimeFormatter displayFormat = DateTimeFormat.forPattern(getString(R.string.text_diplay_date));
+//        displayDay = displayFormat.print(currentDate);
+        toolbar.setTitle(displayDay);
         toolbar.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mApplication.mGuideResultVo.clear();
                 finish();
             }
         });
@@ -44,6 +65,8 @@ public class WorkoutResultActivity extends BaseAppCompatActivity {
     }
 
     protected void loadCodeView() {
+        stopWorkoutCmd();
+
         ViewGroup tab = (ViewGroup) findViewById(R.id.tab);
         tab.addView(LayoutInflater.from(this).inflate(R.layout.fragment_viewpager, tab, false));
 
@@ -67,5 +90,15 @@ public class WorkoutResultActivity extends BaseAppCompatActivity {
                 viewPager.setCurrentItem(1);
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        mApplication.mGuideResultVo.clear();
+        super.onBackPressed();
+    }
+
+    public  void stopWorkoutCmd() {
+        mApplication.send(CmdConst.CMD_REQUEST_STOP, (byte)0, null);
     }
 }

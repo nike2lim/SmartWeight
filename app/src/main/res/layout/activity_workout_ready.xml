@@ -32,13 +32,14 @@
     </android.support.v7.widget.Toolbar>
 
     <TextView
+        android:id="@+id/exerciseNum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="13sp"
-        android:text="1 of 5 Exercise"
+        android:text="@string/text_per_exercise"
         />
 
     <LinearLayout
@@ -71,7 +72,7 @@
                 android:gravity="center"
                 android:text="sec"
                 android:textColor="@color/white"
-                android:textSize="10sp"
+                android:textSize="15sp"
                 />
         </FrameLayout>
     </LinearLayout>

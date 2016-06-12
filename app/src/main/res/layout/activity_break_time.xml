@@ -15,7 +15,7 @@
         app:contentInsetLeft="72dp"
         app:contentInsetStart="72dp"
         app:theme="@style/ThemeOverlay.Custom.ActionBar"
-        app:title="@string/title_connect_device" >
+        app:title="@string/text_per_exercise" >
 
 
         <ImageButton
@@ -39,11 +39,12 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal">
         <TextView
+            android:id="@+id/text_per_set"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:textColor="@color/white"
-            android:text="1/3"
+            android:text="@string/text_per_set"
             />
 
         <TextView
@@ -119,6 +120,7 @@
             />
 
         <TextView
+            android:id="@+id/next_exercise"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
@@ -136,17 +138,15 @@
             />
 
         <TextView
+            android:id="@+id/next_equipment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:gravity="center"
             android:textSize="17sp"
             android:textColor="@color/white"
-            android:text="DUMBBELL"
+            android:text="BARBELL"
             />
-
-
-
 
     </LinearLayout>
 

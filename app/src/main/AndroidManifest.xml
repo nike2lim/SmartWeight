@@ -49,7 +49,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.videoplayer.VideoPlayerActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity
             android:name=".activity.workout.WorkoutActivity"
             android:configChanges="orientation|screenSize"

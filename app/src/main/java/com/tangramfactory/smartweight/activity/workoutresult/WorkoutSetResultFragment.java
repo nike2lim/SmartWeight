@@ -65,10 +65,8 @@ public class WorkoutSetResultFragment extends BaseWorkoutResultFragment {
         int badgeCount = 4;
         setDummyResultData();
 
-
         adapter = new WorkoutSetResultAdapter(dummyList);
         recyclerView.setAdapter(adapter);
-
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -77,7 +75,7 @@ public class WorkoutSetResultFragment extends BaseWorkoutResultFragment {
                     return;
                 }
 
-                DebugLogger.d(TAG, adapter.getItem(position).getExerciseType());
+                DebugLogger.d(TAG, adapter.getItem(position).getExerciseName());
             }
         }));
         return view;
@@ -97,31 +95,34 @@ public class WorkoutSetResultFragment extends BaseWorkoutResultFragment {
     List<GuideResultVo> dummyList = new ArrayList<>();
     private void setDummyResultData() {
 
-        GuideResultVo obj = new GuideResultVo(80, "BenchPress");
-        obj.addSetInfo("1", "5", "kg", "15", "10", "90");
-        obj.addSetInfo("2", "10", "kg", "12", "12", "80");
-        obj.addSetInfo("3", "15", "kg", "8", "4", "70");
-
-
-        GuideResultVo obj2 = new GuideResultVo(70, "Curl");
-        obj2.addSetInfo("1", "5", "kg", "15", "10", "90");
-        obj2.addSetInfo("2", "10", "kg", "12", "12", "80");
-        obj2.addSetInfo("3", "15", "kg", "8", "4", "70");
-
-        GuideResultVo obj3 = new GuideResultVo(90, "Cable Push Down ");
-        obj3.addSetInfo("1", "5", "kg", "15", "10", "90");
-        obj3.addSetInfo("2", "10", "kg", "12", "12", "80");
-        obj3.addSetInfo("3", "15", "kg", "8", "4", "70");
+//        GuideResultVo obj = new GuideResultVo(80, "BenchPress");
+//        obj.addSetInfo("1", "5", "kg", "15", "10", "90");
+//        obj.addSetInfo("2", "10", "kg", "12", "12", "80");
+//        obj.addSetInfo("3", "15", "kg", "8", "4", "70");
+//
+//
+//        GuideResultVo obj2 = new GuideResultVo(70, "Curl");
+//        obj2.addSetInfo("1", "5", "kg", "15", "10", "90");
+//        obj2.addSetInfo("2", "10", "kg", "12", "12", "80");
+//        obj2.addSetInfo("3", "15", "kg", "8", "4", "70");
+//
+//        GuideResultVo obj3 = new GuideResultVo(90, "Cable Push Down ");
+//        obj3.addSetInfo("1", "5", "kg", "15", "10", "90");
+//        obj3.addSetInfo("2", "10", "kg", "12", "12", "80");
+//        obj3.addSetInfo("3", "15", "kg", "8", "4", "70");
 
 //        GuideResultVo obj4 = new GuideResultVo(20, "Shoulder Press");
 //        obj4.addSetInfo("1", "5", "kg", "15", "10", "90");
 //        obj4.addSetInfo("2", "10", "kg", "12", "12", "80");
 //        obj4.addSetInfo("3", "15", "kg", "8", "4", "70");
 
-        dummyList.add(obj);
-        dummyList.add(obj2);
-        dummyList.add(obj3);
-//        dummyList.add(obj4);
+        SmartWeightApplication application = (SmartWeightApplication)getActivity().getApplication();
+        for(GuideResultVo resultVo : application.mGuideResultVo) {
+            dummyList.add(resultVo);
+        }
+//        dummyList.add(obj);
+//        dummyList.add(obj2);
+//        dummyList.add(obj3);
 
     }
 }

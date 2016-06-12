@@ -118,4 +118,11 @@ public class UARTManager extends BleManager<UARTManagerCallbacks> {
 			writeCharacteristic(mTXCharacteristic);
 		}
 	}
+
+	public void send(final byte[] request) {
+		if (mTXCharacteristic != null) {
+			mTXCharacteristic.setValue(request);
+			writeCharacteristic(mTXCharacteristic);
+		}
+	}
 }

@@ -114,7 +114,7 @@ public class BootloaderScannerLollipop extends ScanCallback implements Bootloade
 	@Override
 	public void stopScanning() {
 		DebugLogger.d(TAG, "stopScanning!!!!!!!!");
-		mFound = true;
+		mFound = false;
 		if (scanner != null) {
 			try {
 				scanner.stopScan(this);

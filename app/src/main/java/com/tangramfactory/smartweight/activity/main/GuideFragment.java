@@ -12,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,13 +26,16 @@ import com.tangramfactory.smartweight.utility.DebugLogger;
 import com.tangramfactory.smartweight.view.CircleIndicator;
 import com.tangramfactory.smartweight.view.RecyclerItemClickListener;
 import com.tangramfactory.smartweight.vo.GuideStepVo;
+import com.tangramfactory.smartweight.vo.WorkoutVo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import it.carlom.stikkyheader.core.StikkyHeaderBuilder;
+import it.carlom.stikkyheader.core.StikkyHeaderRecyclerView;
 import it.carlom.stikkyheader.core.animator.AnimatorBuilder;
 import it.carlom.stikkyheader.core.animator.HeaderStikkyAnimator;
+
 
 /**
  * Created by B on 2016-05-23.
@@ -58,7 +60,8 @@ public class GuideFragment extends Fragment{
     TextView threeDayText;
     LinearLayout stepListLayout;
 
-    int currentDay = 0;
+    StikkyHeaderBuilder.RecyclerViewBuilder builder;
+    StikkyHeaderRecyclerView stikkyHeaderRecyclerView;
 
     @Nullable
     @Override
@@ -98,11 +101,11 @@ public class GuideFragment extends Fragment{
             public void onPageSelected(int position) {
                 DebugLogger.d(TAG, "Current selected = " + position);
                 if(position%3 == 0) {
-                    headerImageView.setBackgroundResource(R.drawable.level_03);
+                    headerImageView.setImageResource(R.drawable.level_03);
                 }else if(position%2 == 0) {
-                    headerImageView.setBackgroundResource(R.drawable.level_02);
+                    headerImageView.setImageResource(R.drawable.level_02);
                 }else {
-                    headerImageView.setBackgroundResource(R.drawable.level_01);
+                    headerImageView.setImageResource(R.drawable.level_01);
                 }
 
                 if(position > 0) {
@@ -118,12 +121,6 @@ public class GuideFragment extends Fragment{
             }
         });
 
-        levelViewPager.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
 
         customIndicator = (CircleIndicator)v.findViewById(R.id.indicator_default);
         customIndicator.setViewPager(levelViewPager);
@@ -143,13 +140,15 @@ public class GuideFragment extends Fragment{
             public void onItemClick(View view, int position) {
 //				adapter.getItem(position)
                 DebugLogger.d(TAG, adapter.getItem(position).getStepCount());
-                Intent intent = new Intent(getActivity(), WorkoutPreviewActivity.class);
 
-//                intent.putExtra("title", adapter.getItem(position).getTitle());
-//                intent.putExtra("resId", adapter.getItem(position).getFileResId());
+                Intent intent = new Intent(getActivity(), WorkoutPreviewActivity.class);
+                intent.putExtra("stepNum", position+1);
+                intent.putExtra("exerciseNum", 0);
+                intent.putExtra("exerciseList", adapter.getItem(position).getWorkoutVo());
                 startActivity(intent);
             }
         }));
+
 
         dayWorkoutLayout = (LinearLayout)v.findViewById(R.id.day_workout_layout);
         dayExerciseLayout = (LinearLayout)v.findViewById(R.id.day_exercise_layout);
@@ -198,12 +197,10 @@ public class GuideFragment extends Fragment{
                         customIndicator.setLayoutParams(params2);
                     }
 
-
                     float dp3 = params3.topMargin/(getActivity().getResources().getDisplayMetrics().densityDpi/160);
 
                     DebugLogger.d(TAG, "onScrolled params dayWorkoutLayout before params.topMargin dp = " + dp2);
                     DebugLogger.d(TAG, "onScrolled params dayWorkoutLayout before params.topMargin PIXEL = " + params3.topMargin);
-
 
                     if(dp3  >= 35) {
                         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15,  getActivity().getResources().getDisplayMetrics());
@@ -214,10 +211,12 @@ public class GuideFragment extends Fragment{
 
                         dayWorkoutLayout.setLayoutParams(params3);
                     }
+//                    dayExerciseLayout.setAlpha((float)0.5);
                     dayExerciseLayout.setVisibility(View.GONE);
                 }else {
-                    if(headerImageView.getY() < 100) {
+                    if(builder.getHeaderAnimator().getHeader().getY() >= (builder.getHeaderAnimator().getMaxTranslation() / 5)) {
                         dayExerciseLayout.setVisibility(View.VISIBLE);
+//                        dayExerciseLayout.setAlpha((float)1);
 
                         float dp = params.topMargin/(getActivity().getResources().getDisplayMetrics().densityDpi/160);
                         if(dp == 36) {
@@ -303,45 +302,7 @@ public class GuideFragment extends Fragment{
                 break;
 
         }
-
     }
-
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-//        rootLayout2.setTranslationY(e2.getY() - e1.getY());
-//        float scale = (rootLayout2.getHeight() / distanceY) / 100;
-//        rootLayout2.setScaleY(scale);
-
-        if(e2.getY() - e1.getY() < 0) {
-//            if(stepListLayout.getVisibility() == View.GONE) {
-//                stepListLayout.setVisibility(View.VISIBLE);
-//            }
-
-//            LinearLayout.LayoutParams param = (LinearLayout.LayoutParams)rootLayout2.getLayoutParams();
-//            if(param.height < 0) {
-//                param.height = rootLayout2.getHeight();
-//            }
-//            param.height = (int) (param.height + (e2.getY() - e1.getY()));
-//            rootLayout2.setLayoutParams(param);
-
-            LinearLayout.LayoutParams params =  (LinearLayout.LayoutParams)levelViewPagerLayout.getLayoutParams();
-            if(params.topMargin > 35) {
-                params.topMargin = params.topMargin - 27;
-                levelViewPagerLayout.setLayoutParams(params);
-            }
-
-
-        }else {
-            LinearLayout.LayoutParams params =  (LinearLayout.LayoutParams)levelViewPagerLayout.getLayoutParams();
-            params.topMargin = params.topMargin + 27;
-            levelViewPagerLayout.setLayoutParams(params);
-        }
-        return false;
-    };
-
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-        return false;
-    };
 
     private void initDayLayout() {
         oneDayText.setTextColor(Color.parseColor("#AAAAAA"));
@@ -356,24 +317,123 @@ public class GuideFragment extends Fragment{
         dayWorkoutLayout.setVisibility(View.GONE);
         dayExerciseLayout.setVisibility(View.GONE);
         lockScreenLayout.setVisibility(View.VISIBLE);
+
+        builder.getHeaderAnimator().onScroll(0);
+        stikkyHeaderRecyclerView.initDecoration();
+        recyclerView.setAdapter(null);
+        recyclerView.removeAllViews();
+
+        recyclerGoneSetLayoutParam();
     }
 
     private void showLevel() {
         dayWorkoutLayout.setVisibility(View.VISIBLE);
         dayExerciseLayout.setVisibility(View.VISIBLE);
         lockScreenLayout.setVisibility(View.GONE);
+
+        builder.getHeaderAnimator().onScroll(0);
+        builder.minHeightHeaderDim(R.dimen.min_height_header);
+        recyclerView.setAdapter(adapter);
+        stikkyHeaderRecyclerView.initDecoration();
+        stikkyHeaderRecyclerView.init();
+
+        recyclerGoneSetLayoutParam();
     }
 
+    private void recyclerShowSetLayoutParam() {
+        LinearLayout.LayoutParams params =  (LinearLayout.LayoutParams)levelViewPagerLayout.getLayoutParams();
+        LinearLayout.LayoutParams params2 =  (LinearLayout.LayoutParams)customIndicator.getLayoutParams();
+        LinearLayout.LayoutParams params3 =  (LinearLayout.LayoutParams)dayWorkoutLayout.getLayoutParams();
+
+        float dp = params.topMargin/(getActivity().getResources().getDisplayMetrics().densityDpi/160);
+        DebugLogger.d(TAG, "onScrolled params  levelViewPagerLayout before params.topMargin dp = " + dp);
+        DebugLogger.d(TAG, "onScrolled params  levelViewPagerLayout before params.topMargin PIXEL = " + params.topMargin);
+        if(dp >= 63) {
+            float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 27,  getActivity().getResources().getDisplayMetrics());
+//                        params.topMargin = params.topMargin - 27;
+            DebugLogger.d(TAG, "onScrolled levelViewPagerLayout after params.topMargin 27 dp to px = " + px);
+
+            params.topMargin = params.topMargin  - (int) px;
+            DebugLogger.d(TAG, "onScrolled levelViewPagerLayout after params.topMargin = " + params.topMargin);
+            levelViewPagerLayout.setLayoutParams(params);
+        }
+
+        float dp2 = params2.topMargin/(getActivity().getResources().getDisplayMetrics().densityDpi/160);
+
+        DebugLogger.d(TAG, "onScrolled params customIndicator before params.topMargin dp = " + dp2);
+        DebugLogger.d(TAG, "onScrolled params customIndicator before params.topMargin PIXEL = " + params2.topMargin);
+
+        if(dp2  >= 20) {
+            float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 11,  getActivity().getResources().getDisplayMetrics());
+//                        params2.topMargin = params2.topMargin - 11;
+            DebugLogger.d(TAG, "onScrolled customIndicator after params.topMargin 11 dp to px = " + px);
+            params2.topMargin = (int) (params2.topMargin -px);
+            DebugLogger.d(TAG, "onScrolled customIndicator after params.topMargin = " + params2.topMargin);
+
+            customIndicator.setLayoutParams(params2);
+        }
+
+        float dp3 = params3.topMargin/(getActivity().getResources().getDisplayMetrics().densityDpi/160);
+
+        DebugLogger.d(TAG, "onScrolled params dayWorkoutLayout before params.topMargin dp = " + dp2);
+        DebugLogger.d(TAG, "onScrolled params dayWorkoutLayout before params.topMargin PIXEL = " + params3.topMargin);
+
+        if(dp3  >= 35) {
+            float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15,  getActivity().getResources().getDisplayMetrics());
+//                        params2.topMargin = params2.topMargin - 11;
+            DebugLogger.d(TAG, "onScrolled dayWorkoutLayout after params.topMargin 11 dp to px = " + px);
+            params3.topMargin = (int) (params3.topMargin -px);
+            DebugLogger.d(TAG, "onScrolled dayWorkoutLayout after params.topMargin = " + params3.topMargin);
+
+            dayWorkoutLayout.setLayoutParams(params3);
+        }
+        dayExerciseLayout.setAlpha((float)0.5);
+    }
+
+    private void recyclerGoneSetLayoutParam() {
+
+        LinearLayout.LayoutParams params =  (LinearLayout.LayoutParams)levelViewPagerLayout.getLayoutParams();
+        LinearLayout.LayoutParams params2 =  (LinearLayout.LayoutParams)customIndicator.getLayoutParams();
+        LinearLayout.LayoutParams params3 =  (LinearLayout.LayoutParams)dayWorkoutLayout.getLayoutParams();
+
+        dayExerciseLayout.setVisibility(View.VISIBLE);
+        dayExerciseLayout.setAlpha((float)1);
+
+        float dp = params.topMargin/(getActivity().getResources().getDisplayMetrics().densityDpi/160);
+        if(dp == 36) {
+            float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 27,  getActivity().getResources().getDisplayMetrics());
+            params.topMargin = params.topMargin + (int)px;
+            levelViewPagerLayout.setLayoutParams(params);
+        }
+
+        dp = params2.topMargin/(getActivity().getResources().getDisplayMetrics().densityDpi/160);
+        if(dp == 9) {
+            float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 11,  getActivity().getResources().getDisplayMetrics());
+            params2.topMargin = params2.topMargin + (int)px;
+            customIndicator.setLayoutParams(params2);
+        }
+
+        dp = params3.topMargin/(getActivity().getResources().getDisplayMetrics().densityDpi/160);
+        if(dp  == 20) {
+            float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15,  getActivity().getResources().getDisplayMetrics());
+            DebugLogger.d(TAG, "onScrolled customIndicator after params.topMargin 11 dp to px = " + px);
+            params3.topMargin = (int) (params3.topMargin +px);
+            DebugLogger.d(TAG, "onScrolled customIndicator after params.topMargin = " + params3.topMargin);
+
+            dayWorkoutLayout.setLayoutParams(params3);
+        }
+    }
 
     List<GuideStepVo> dummyGuideStepList = new ArrayList<GuideStepVo>();
 
     private void dummyGuideStepData() {
+        dummyWorkoutData();
 
-        GuideStepVo obj = new GuideStepVo("1", "2", "12", true);
-        GuideStepVo obj2 = new GuideStepVo("2", "1", "10", false);
-        GuideStepVo obj3 = new GuideStepVo("3", "0", "12", false);
-        GuideStepVo obj4 = new GuideStepVo("4", "2", "15", false);
-        GuideStepVo obj5 = new GuideStepVo("5", "1", "10", false);
+        GuideStepVo obj = new GuideStepVo("1", "2", "12", true, dummyWorkoutList);
+        GuideStepVo obj2 = new GuideStepVo("2", "1", "10", false, dummyWorkoutList);
+        GuideStepVo obj3 = new GuideStepVo("3", "0", "12", false, dummyWorkoutList);
+        GuideStepVo obj4 = new GuideStepVo("4", "2", "15", false, dummyWorkoutList);
+        GuideStepVo obj5 = new GuideStepVo("5", "1", "10", false, dummyWorkoutList);
 
         dummyGuideStepList.add(obj);
         dummyGuideStepList.add(obj2);
@@ -382,15 +442,37 @@ public class GuideFragment extends Fragment{
         dummyGuideStepList.add(obj5);
     }
 
+
+    List<WorkoutVo> dummyWorkoutList = new ArrayList<WorkoutVo>();
+
+    private void dummyWorkoutData() {
+//        1. 컬
+//        2. 레터럴 레이즈
+//        3. 숄더 프레스
+//        4. 킥백
+//        5. 런지
+
+        WorkoutVo obj = new WorkoutVo(getString(R.string.text_curl),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
+        WorkoutVo obj2 = new WorkoutVo(getString(R.string.text_lateral_raises),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
+        WorkoutVo obj3 = new WorkoutVo(getString(R.string.text_shoulder_press),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
+        WorkoutVo obj4 = new WorkoutVo(getString(R.string.text_kick_back),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
+        WorkoutVo obj5= new WorkoutVo(getString(R.string.text_lunge),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
+
+        dummyWorkoutList.add(obj);
+        dummyWorkoutList.add(obj2);
+        dummyWorkoutList.add(obj3);
+        dummyWorkoutList.add(obj4);
+        dummyWorkoutList.add(obj5);
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        StikkyHeaderBuilder.stickTo(recyclerView)
-                .setHeader(R.id.header, (ViewGroup) getView())
-                .minHeightHeaderDim(R.dimen.min_height_header)
-                .animator(new ParallaxStikkyAnimator())
-                .build();
+        builder = StikkyHeaderBuilder.stickTo(recyclerView);
+        builder.setHeader(R.id.header, (ViewGroup) getView());
+        builder.minHeightHeaderDim(R.dimen.min_height_header);
+        stikkyHeaderRecyclerView = builder.build();
     }
 
     private class ParallaxStikkyAnimator extends HeaderStikkyAnimator {
@@ -400,4 +482,5 @@ public class GuideFragment extends Fragment{
             return AnimatorBuilder.create().applyVerticalParallax(mHeader_image);
         }
     }
+
 }

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:angle="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -39,15 +37,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
             android:orientation="horizontal">
 
 
             <ImageView
+                android:id="@+id/setImage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="17dp"
                 android:layout_gravity="center"
-                android:background="@drawable/workout_set_01"/>
+                android:src="@drawable/workout_set_01"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -57,6 +57,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/equipment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13sp"
@@ -64,6 +65,7 @@
                     android:text="Dumbbell"/>
 
                 <TextView
+                    android:id="@+id/weight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
@@ -79,6 +81,7 @@
         <RelativeLayout
             android:layout_width="276dp"
             android:layout_height="276dp"
+            android:layout_marginTop="15dp"
             android:layout_gravity="center_horizontal">
 
             <ImageView
@@ -96,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="@color/white"
+                android:textColor="#1E1E1E"
                 android:textSize="125sp"
                 android:text="0"
                 android:layout_centerHorizontal="true"
@@ -135,8 +138,9 @@
             android:id="@+id/maskView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:layout_gravity="center_horizontal"
-            android:rotation="45"
+            android:rotation="65"
             android:background="@drawable/mask_loading"
 
             />
@@ -144,6 +148,7 @@
             android:id="@+id/guage_bar"
             android:layout_width="276dp"
             android:layout_height="276dp"
+            android:layout_marginTop="15dp"
             android:layout_gravity="center_horizontal"
             angle:bg="@drawable/gauge_bar"
             angle:start_degree="135"
@@ -162,6 +167,7 @@
             android:id="@+id/guage_niddle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:rotation="45"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/gauge_needle"/>
@@ -170,7 +176,7 @@
             android:id="@+id/angle_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="260dp"
+            android:layout_marginTop="275dp"
             android:orientation="vertical"
             >
 
@@ -204,7 +210,6 @@
                     android:textColor="@color/white_50"
                     android:text="R"
                     />
-
             </LinearLayout>
 
             <LinearLayout
@@ -213,20 +218,23 @@
                 android:gravity="center"
                 android:orientation="horizontal">
                 <TextView
+                    android:id="@+id/angle_left_right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="22sp"
                     android:textColor="@color/white"
-                    android:text="R"
+                    android:text="@string/text_angle_left"
                     />
 
                 <TextView
+                    android:id="@+id/angle_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="9dp"
                     android:textSize="30sp"
                     android:text="@string/text_angle"
                     />
+
             </LinearLayout>
 
         </LinearLayout>
@@ -244,10 +252,10 @@
             android:layout_width="125dp"
             android:layout_height="125dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="260dp"
+            android:layout_marginTop="275dp"
             angle:bg="@drawable/angle_bar"
             angle:start_degree="0"
-            angle:clip_degree="30"
+            angle:clip_degree="0"
             />
 
         <ImageView
@@ -255,16 +263,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="260dp"
-            android:rotation="30"
+            android:layout_marginTop="275dp"
+            android:rotation="0"
             android:background="@drawable/angle_needle"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
-            android:layout_gravity="bottom"
-            >
+
+            android:layout_gravity="bottom">
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -286,8 +294,6 @@
                 android:onClick="onViewClick"
                 />
         </RelativeLayout>
-
     </FrameLayout>
-
 
 </LinearLayout>

@@ -31,6 +31,7 @@ import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.tangramfactory.smartweight.SmartWeightApplication;
+import com.tangramfactory.smartweight.activity.device.CmdConst;
 import com.tangramfactory.smartweight.utility.DebugLogger;
 import com.tangramfactory.smartweight.utility.SharedPreference;
 
@@ -105,10 +106,20 @@ public class UARTService extends BleProfileService implements UARTManagerCallbac
 	public final static String ACTION_RECEIVE_INTERVAL_REST_DATA_COUNT = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_INTERVAL_REST_DATA_COUNT";
 	public final static String ACTION_RECEIVE_INTERVAL_REST_DATA_BREAKTIME = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_INTERVAL_RESTDATA_BREAKTIME";
 
-	public final static String ACTION_RECEIVE_WEIGHT_DATA = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_WEIGHT_DATA";
+
+
+	public final static String ACTION_RECEIVE_ANGLE_DATA = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_ANGLE_DATA";
 	public final static String ACTION_RECEIVE_WEIGHT_DATA_XVALUE = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_WEIGHT_DATA_XVALUE ";
 	public final static String ACTION_RECEIVE_WEIGHT_DATA_YVALUE  = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_WEIGHT_DATA_YVALUE ";
 	public final static String ACTION_RECEIVE_WEIGHT_DATA_ZVALUE  = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_WEIGHT_DATA_ZVALUE ";
+	public final static String ACTION_RECEIVE_WEIGHT_DATA_ANGLE  = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_WEIGHT_DATA_ANGLE ";
+
+	public final static String ACTION_RECEIVE_COUNT_DATA = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_COUNT_DATA";
+	public final static String ACTION_RECEIVE_COUNT_DATA_COUNT = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_COUNT_DATA_COUNT";
+	public final static String ACTION_RECEIVE_COUNT_DATA_ACCURACY = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_COUNT_DATA_ACCURACY";
+
+	public final static String ACTION_RECEIVE_BREAK_TIME = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_BREAK_TIME";
+	public final static String ACTION_RECEIVE_BREAK_TIME_DATA = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_BREAK_TIME_DATA";
 
 
 	private final static int NOTIFICATION_ID = 349; // random
@@ -133,6 +144,11 @@ public class UARTService extends BleProfileService implements UARTManagerCallbac
 		@Override
 		public void send(final String text) {
 			mManager.send(text);
+		}
+
+		@Override
+		public void send(byte[] request) {
+			mManager.send(request);
 		}
 	}
 
@@ -367,9 +383,13 @@ public class UARTService extends BleProfileService implements UARTManagerCallbac
 	byte[] xrr = new byte[4];
 	byte[] yrr = new byte[4];
 	byte[] zrr = new byte[4];
+	byte[] angleArr = new byte[4];
+	byte[] convertData = new byte[4];
+	int[] value = new int[20];
+
 	@Override
 	public void onDataReceived(byte[] data) {
-		int[] value = new int[data.length];
+		Arrays.fill(value, 0);
 
 		for(int i=0; i < data.length; i++) {
 			if(data[i] < 0) {
@@ -379,82 +399,111 @@ public class UARTService extends BleProfileService implements UARTManagerCallbac
 			}
 		}
 
+		Intent receivedDataBroadcast = null;
+
 		int cmdIsResponse = value[0] >> 7;
 		int cmd = value[0] & 0x7F;
 
 		squence[0] = (byte)value[1];
 		squence[1] = (byte)(value[2]>>3);
 
-
-//		int sequence = value[1] + (value[2] & 0xF8);
-		int sequence = (value[1]<< 8)+ (value[2] >>3);
-		int cmdLen = (value[2] & 0x07);
-		int angle = value[3] + value[4] + value[5] + value[6];
-
-
-		Arrays.fill( xrr, (byte) 0);
-		Arrays.fill( yrr, (byte) 0);
-		Arrays.fill( zrr, (byte) 0);
-
-		xrr[0] = (byte)value[7];
-		xrr[1] = (byte)value[8];
-		xrr[2] = (byte)value[9];
-		xrr[3] = (byte)value[10];
-
-		yrr[0] = (byte)value[11];
-		yrr[1] = (byte)value[12];
-		yrr[2] = (byte)value[13];
-		yrr[3] = (byte)value[14];
-
-		zrr[0] = (byte)value[15];
-		zrr[1] = (byte)value[16];
-		zrr[2] = (byte)value[17];
-		zrr[3] = (byte)value[18];
-
-//		int x1 = byteToint(xrr);
-//		int y1 = byteToint(yrr);
-//		int z1 = byteToint(zrr);
-
-		int x1 = java.nio.ByteBuffer.wrap(xrr).order(ByteOrder.LITTLE_ENDIAN).getInt();
-		int y1 = java.nio.ByteBuffer.wrap(yrr).order(ByteOrder.LITTLE_ENDIAN).getInt();
-		int z1 = java.nio.ByteBuffer.wrap(zrr).order(ByteOrder.LITTLE_ENDIAN).getInt();
-
-
-		int x2 = byteToint2(xrr);
-		int y2 = byteToint2(yrr);
-		int z2 = byteToint2(zrr);
-
-
-		int x = value[7] + value[8] + value[9] + value[10];
-		int y = value[11] + value[12] + value[13] + value[14];
-		int z = value[15] + value[16] + value[17] + value[18];
+		int sequence = (value[1]<< 3)+ ((value[2] >>5) &0x7);
+		int cmdLen = (value[2] & 0x1F);
 
 		DebugLogger.d(TAG, "onDataReceived cmdIsResponse = " + cmdIsResponse);
 		DebugLogger.d(TAG, "onDataReceived cmd = " + cmd);
 		DebugLogger.d(TAG, "onDataReceived sequence = " + sequence);
+		DebugLogger.d(TAG, "onDataReceived sequence binary = " + Integer.toBinaryString(sequence));
+		DebugLogger.d(TAG, "onDataReceived sequence value[1]= " + value[1]);
+		DebugLogger.d(TAG, "onDataReceived sequence value[2] = " + value[2]);
+
+
 		DebugLogger.d(TAG, "onDataReceived data[1] = " + data[1] + ", data[2] = " + data[2]);
 		DebugLogger.d(TAG, "onDataReceived value[1] = " + value[1] + ", value[2] = " + value[2]);
-
-//		DebugLogger.d(TAG, "onDataReceived sequence2 = " + java.nio.ByteBuffer.wrap(squence).getInt());
-
 		DebugLogger.d(TAG, "onDataReceived cmdLen = " + cmdLen);
-		DebugLogger.d(TAG, "onDataReceived angle = " + angle);
-		DebugLogger.d(TAG, "onDataReceived x = " + x + ", y = " + y + ", z = " + z);
-		DebugLogger.d(TAG, "onDataReceived x2 = " + x1 + ", y2 = " + y1 + ", z2 = " + z1);
-		DebugLogger.d(TAG, "onDataReceived x3= " + x2 + ", y3 = " + y2 + ", z3 = " + z2);
 
-		Intent receivedDataBroadcast = null;
-		receivedDataBroadcast = new Intent(ACTION_RECEIVE_WEIGHT_DATA);
-		receivedDataBroadcast.putExtra(ACTION_RECEIVE_WEIGHT_DATA_XVALUE, x1);
-		receivedDataBroadcast.putExtra(ACTION_RECEIVE_WEIGHT_DATA_YVALUE, y1);
-		receivedDataBroadcast.putExtra(ACTION_RECEIVE_WEIGHT_DATA_ZVALUE, z1);
+		switch(cmd) {
+			case CmdConst.CMD_REQUEST_START:
+				DebugLogger.d(TAG, "CmdConst.CMD_REQUEST_START ack recevied!");
+				break;
 
-		sendBroadcast(receivedDataBroadcast);
-	}
+			case CmdConst.CMD_RESPONSE_ANGLE_DATA:
+				Arrays.fill( convertData, (byte) 0);
+				convertData[0] = (byte)value[7];
+				convertData[1] = (byte)value[8];
+				convertData[2] = (byte)value[9];
+				convertData[3] = (byte)value[10];
 
-	public int byteToint(byte[] arr){
-		return (arr[0] & 0xff)<<24 | (arr[1] & 0xff)<<16 |
-				(arr[2] & 0xff)<<8 | (arr[3] & 0xff);
+				int x1 = java.nio.ByteBuffer.wrap(convertData).order(ByteOrder.LITTLE_ENDIAN).getInt();
+
+
+				convertData[0] = (byte)value[11];
+				convertData[1] = (byte)value[12];
+				convertData[2] = (byte)value[13];
+				convertData[3] = (byte)value[14];
+
+				int y1 = java.nio.ByteBuffer.wrap(convertData).order(ByteOrder.LITTLE_ENDIAN).getInt();
+
+				convertData[0] = (byte)value[15];
+				convertData[1] = (byte)value[16];
+				convertData[2] = (byte)value[17];
+				convertData[3] = (byte)value[18];
+
+				int z1 = java.nio.ByteBuffer.wrap(convertData).order(ByteOrder.LITTLE_ENDIAN).getInt();
+
+				convertData[0] = (byte)value[3];
+				convertData[1] = (byte)value[4];
+				convertData[2] = (byte)value[5];
+				convertData[3] = (byte)value[6];
+
+				int angle = java.nio.ByteBuffer.wrap(convertData).order(ByteOrder.LITTLE_ENDIAN).getInt();
+
+
+				DebugLogger.d(TAG, "onDataReceived x = " + x1 + ", y = " + y1 + ", z = " + z1);
+				DebugLogger.d(TAG, "onDataReceived angle = " + angle);
+
+				receivedDataBroadcast = new Intent(ACTION_RECEIVE_ANGLE_DATA);
+				receivedDataBroadcast.putExtra(ACTION_RECEIVE_WEIGHT_DATA_XVALUE, x1);
+				receivedDataBroadcast.putExtra(ACTION_RECEIVE_WEIGHT_DATA_YVALUE, y1);
+				receivedDataBroadcast.putExtra(ACTION_RECEIVE_WEIGHT_DATA_ZVALUE, z1);
+				receivedDataBroadcast.putExtra(ACTION_RECEIVE_WEIGHT_DATA_ANGLE, angle);
+				break;
+
+			case CmdConst.CMD_RESPONSE_COUNT_DATA:
+				int count = (value[4] << 8) | value[3];
+				int accuracy = (value[6] << 8) | value[5];
+
+				DebugLogger.d(TAG, "CmdConst.CMD_RESPONSE_COUNT_DATA count = " + count + ", accuracy = " + accuracy);
+
+				receivedDataBroadcast = new Intent(ACTION_RECEIVE_COUNT_DATA);
+				receivedDataBroadcast.putExtra(ACTION_RECEIVE_COUNT_DATA_COUNT, count);
+				receivedDataBroadcast.putExtra(ACTION_RECEIVE_COUNT_DATA_ACCURACY, accuracy);
+				break;
+
+			case CmdConst.CMD_RESPONSE_BATTERY :
+				int batteryinfo = value[3];
+				SmartWeightApplication.batteryState = batteryinfo;
+				SharedPreference.getInstance(this).put("DeviceBattery", batteryinfo);
+				super.onBatteryValueReceived(batteryinfo);
+				DebugLogger.d(TAG, "onDataReceived batteryinfo = " + batteryinfo);
+				break;
+
+			case CmdConst.CMD_RESPONSE_BREAKTIME_DATA:
+				convertData[0] = (byte)value[3];
+				convertData[1] = (byte)value[4];
+				convertData[2] = (byte)value[5];
+				convertData[3] = (byte)value[6];
+
+				int breakTime = java.nio.ByteBuffer.wrap(convertData).order(ByteOrder.LITTLE_ENDIAN).getInt();
+				DebugLogger.d(TAG, "CmdConst.CMD_RESPONSE_BREAKTIME_DATA breakTime = " + breakTime);
+				receivedDataBroadcast = new Intent(ACTION_RECEIVE_BREAK_TIME);
+				receivedDataBroadcast.putExtra(ACTION_RECEIVE_BREAK_TIME_DATA, breakTime);
+				break;
+		}
+
+		if(null != receivedDataBroadcast) {
+			sendBroadcast(receivedDataBroadcast);
+		}
 	}
 
 	public int byteToint2(byte[] arr){

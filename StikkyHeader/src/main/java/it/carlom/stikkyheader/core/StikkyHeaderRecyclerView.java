@@ -26,7 +26,7 @@ public class StikkyHeaderRecyclerView extends StikkyHeader {
     }
 
     @Override
-    protected void init() {
+    public void init() {
         super.init();
         setupOnScrollListener();
         setupItemDecorator();
@@ -38,9 +38,9 @@ public class StikkyHeaderRecyclerView extends StikkyHeader {
         mRecyclerView.invalidateItemDecorations();
     }
 
+    RecyclerView.ItemDecoration mItemDecoration = null;
     private void setupItemDecorator() {
         final RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
-        RecyclerView.ItemDecoration mItemDecoration = null;
 
         if (layoutManager instanceof StaggeredGridLayoutManager) {
             int orientation = ((StaggeredGridLayoutManager) layoutManager).getOrientation();
@@ -144,6 +144,13 @@ public class StikkyHeaderRecyclerView extends StikkyHeader {
         mRecyclerView.addOnScrollListener(mOnScrollerListenerStikky);
     }
 
+    public void initDecoration() {
+        if(null != mItemDecoration) {
+            mRecyclerView.removeItemDecoration(mItemDecoration);
+            mItemDecoration = null;
+        }
+    }
+
     private class OnScrollListenerStikky extends RecyclerView.OnScrollListener {
 
         @Override
@@ -155,11 +162,7 @@ public class StikkyHeaderRecyclerView extends StikkyHeader {
             } else {
                 mScrolledY += dy;
             }
-
             onScroll(-mScrolledY);
         }
-
     }
-
-
 }

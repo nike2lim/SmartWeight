@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
  */
 public class BadgeAdapter  extends FragmentStatePagerAdapter {
 
-    private int pagerCount = 12;
+    private int pagerCount = 3;
 
     public BadgeAdapter(FragmentManager fm) {
         super(fm);

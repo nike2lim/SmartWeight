@@ -33,13 +33,13 @@
 
 
         <TextView
+            android:id="@+id/exerciseNum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="13sp"
-            android:text="1 of 5 Exercise"
             />
 
         <LinearLayout
@@ -73,10 +73,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="@string/text_flipper_bench_press"
+
                     android:textStyle="bold"
                     android:lineSpacingMultiplier="0.8"
-                    android:textColor="@color/white_80"
+                    android:textColor="@color/white"
                     android:textSize="50sp" />
 
                 <TextView
@@ -102,6 +102,7 @@
 
 
     <TextView
+        android:id="@+id/equipment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -140,6 +141,7 @@
                 android:text="reps"/>
 
             <TextView
+                android:id="@+id/reps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -177,6 +179,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/breaktime"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:textColor="@color/white"
@@ -223,6 +226,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
                 <TextView
+                    android:id="@+id/weight"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:textColor="@color/white"
@@ -230,6 +234,7 @@
                     android:text="10"/>
 
                 <TextView
+                    android:id="@+id/weightunit"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="6dp"

@@ -40,7 +40,7 @@
                     android:ellipsize="end"
                     android:textSize="11sp"
                     android:textColor="#b4b4b4b4"
-                    android:text="one lined"
+                    android:text="@string/text_curl"
                     />
 
             </LinearLayout>
@@ -70,7 +70,7 @@
                     android:ellipsize="end"
                     android:textSize="11sp"
                     android:textColor="#b4b4b4b4"
-                    android:text="one linef"
+                    android:text="@string/text_lateral_raises"
                     />
 
             </LinearLayout>
@@ -99,7 +99,7 @@
                     android:ellipsize="end"
                     android:textSize="11sp"
                     android:textColor="#b4b4b4b4"
-                    android:text="one lin  ed safsd fasdfasdfasdffasdf"/>
+                    android:text="@string/text_shoulder_press"/>
 
             </LinearLayout>
         </LinearLayout>
@@ -136,7 +136,7 @@
                     android:ellipsize="end"
                     android:textColor="#b4b4b4b4"
                     android:textSize="11sp"
-                    android:text="one lined"
+                    android:text="@string/text_kick_back"
                     />
 
             </LinearLayout>
@@ -166,7 +166,7 @@
                     android:ellipsize="end"
                     android:textColor="#b4b4b4b4"
                     android:textSize="11sp"
-                    android:text="one linef"
+                    android:text="@string/text_lunge"
                     />
 
             </LinearLayout>
@@ -178,6 +178,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:onClick="onViewClick"
+                android:visibility="invisible"
                 android:orientation="vertical">
                 <ImageView
                     android:layout_width="wrap_content"

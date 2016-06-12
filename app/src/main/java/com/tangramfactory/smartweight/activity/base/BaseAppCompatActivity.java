@@ -17,7 +17,6 @@ import com.tangramfactory.smartweight.SmartWeightApplication;
 import com.tangramfactory.smartweight.ble.scanner.BootloaderScanner;
 import com.tangramfactory.smartweight.ble.service.BleProfileService;
 import com.tangramfactory.smartweight.utility.DebugLogger;
-import com.tangramfactory.smartweight.utility.SharedPreference;
 
 /**
  * Created by Shlim on 2016-05-23.
@@ -140,13 +139,9 @@ public class BaseAppCompatActivity extends AppCompatActivity {
 
                 case BluetoothAdapter.STATE_ON:
                     DebugLogger.d(TAG, "mBluetoothBroadcastReceiver BluetoothAdapter.STATE_ON");
-                    String deviceAddress = SharedPreference.getInstance(mContext).getValue("DeviceAddress", "NONE");
-                    if("NONE".equals(deviceAddress)) {
-                        mApplication.startScan(BootloaderScanner.SCAN_MODE_RSSI);
-                    }else {
-                        mApplication.startScan(BootloaderScanner.SCAN_MODE_TARGET);
-                    }
+                    mApplication.startScan(BootloaderScanner.SCAN_MODE_RSSI);
                     break;
+
                 case BluetoothAdapter.STATE_TURNING_ON:
                     DebugLogger.d(TAG, "mBluetoothBroadcastReceiver BluetoothAdapter.STATE_TURNING_ON");
                     break;

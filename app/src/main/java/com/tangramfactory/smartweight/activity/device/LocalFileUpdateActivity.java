@@ -1,8 +1,6 @@
 package com.tangramfactory.smartweight.activity.device;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
@@ -79,6 +77,7 @@ public class LocalFileUpdateActivity extends BaseAppCompatActivity {
         progressWheelLinear.setRimColor(Color.parseColor("#242527"));
 
         mApplication.send("dfu");
+
         BaseBLEApplication.isDFU = true;
         startInitDFU();
     }

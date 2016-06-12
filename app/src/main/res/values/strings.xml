@@ -24,8 +24,27 @@
     <string name="level15">LEVEL 15</string>
 
     <string name="title_step">STEP %d</string>
-    <string name="per_exercise">%1$d of %2$d Exercise</string>
+    <string name="text_per_exercise">%1$d of %2$d Exercise</string>
 
+    <string name="text_per_set">%1$d/%2$d</string>
+
+
+
+    <string name="text_bench_press">BENCH PRESS</string>
+    <string name="text_cable_pushdown">CABLE PUSHDOWN</string>
+    <string name="text_plank">PLANK</string>
+    <string name="text_kick_back">KICK BACK</string>
+    <string name="text_fly">FLY</string>
+    <string name="text_curl">CURL</string>
+    <string name="text_lunge">LUNGE</string>
+    <string name="text_row">ROW</string>
+    <string name="text_sit_up">SIT UP</string>
+    <string name="text_squat">SQUAT</string>
+    <string name="text_lateral_raises">LATERAL RAISES</string>
+    <string name="text_deadlift">DEADLIFT</string>
+    <string name="text_back_extension">BACK EXTENSION</string>
+    <string name="text_lat_pulldown">LAT PULLDOWN</string>
+    <string name="text_shoulder_press">SHOULDER PRESS</string>
 
     <string name="text_flipper_bench_press">BENCH\nPRESS</string>
     <string name="text_flipper_cable_pushdown">CABLE\nPUSHDOWN</string>
@@ -43,13 +62,20 @@
     <string name="text_flipper_lat_pulldown">LAT\nPULLDOWN</string>
     <string name="text_flipper_shoulder_press">SHOULDER\nPRESS</string>
 
+
+    <string name="text_angle_left">L</string>
+    <string name="text_angle_right">R</string>
+
+    <string name="text_diplay_date">dd MMMM, yyyy</string>
+
+
     <string name="text_dumbell">DUMBELL</string>
     <string name="text_start">START</string>
     <string name="text_connect">CONNECT</string>
 
 
     <string name="text_underarmour">UA Record<font size="8"><sup>(TM)</sup></font></string>
-    <string name="text_angle">30<font size="10"><sup>o</sup></font></string>
+    <string name="text_angle">%1$d<font size="10"><sup>˚</sup></font></string>
 
     <string name="text_biceps"><u>BICEPS CURLS</u></string>
 

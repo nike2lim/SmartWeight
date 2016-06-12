@@ -1,5 +1,7 @@
 package com.tangramfactory.smartweight.vo;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 
 /**
@@ -7,11 +9,17 @@ import java.util.ArrayList;
  */
 public class GuideResultVo {
     int progress;
-    String exerciseType;
+    String exerciseName;
+
+    DateTime startTime;
+    String restTime;
+    String totalTime;
+
     ArrayList<SetInfo> setInfoList;
-    public GuideResultVo(int progress, String type) {
+    public GuideResultVo(int progress, String exerciseName, DateTime time) {
         this.progress = progress;
-        this.exerciseType = type;
+        this.exerciseName = exerciseName;
+        this.startTime = time;
         setInfoList = new ArrayList<>();
     }
 
@@ -32,17 +40,39 @@ public class GuideResultVo {
         return progress;
     }
 
-    public String getExerciseType() {
-        return exerciseType;
+    public String getExerciseName() {
+        return exerciseName;
     }
 
+    public void setStartTime(DateTime time) {
+        startTime = time;
+    }
 
+    public DateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setRestTime(String restTime) {
+        this.restTime = restTime;
+    }
+
+    public String getRestTime() {
+        return this.restTime;
+    }
+
+    public void setTotalTime(String totalTime) {
+        this.totalTime = totalTime;
+    }
+
+    public String getTotalTime() {
+        return this.totalTime;
+    }
     public void setProgress(int progress) {
         this.progress = progress;
     }
 
-    public void setExerciseType(String exerciseType) {
-        this.exerciseType = exerciseType;
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
     }
 
 

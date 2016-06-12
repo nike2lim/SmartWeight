@@ -31,7 +31,6 @@ public class HeaderStikkyAnimator extends BaseStickyHeaderAnimator {
         if (hasAnimatorBundles) {
             mAnimatorBuilder.animateOnScroll(mBoundedTranslatedRatio, StikkyCompat.getTranslationY(getHeader()));
         }
-
     }
 
     public float getBoundedTranslatedRatio() {
