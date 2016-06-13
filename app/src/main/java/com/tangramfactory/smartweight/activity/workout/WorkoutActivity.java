@@ -38,12 +38,13 @@ public class WorkoutActivity extends BaseAppCompatActivity {
     public Toolbar toolbar;
     ImageButton deviceBatteryStateImage;
 
+
+    FrameLayout mRootContentLayout;
+
     ImageView mAngleNiddle;
     ImageView mGuageNiddle;
     ImageView maskImageView;
 
-//    ImageView mAngleBar;`
-//    DonutProgress mAngleBar;
     CircleClipView mGuageBar;
     CircleClipView mAngleBar;
     ImageView setImageView;
@@ -66,6 +67,9 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 
     int mCount;
     int[] mAccuracy;
+
+    private SoundPool soundPool;
+    private int soundID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +104,8 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 
     protected void loadCodeView() {
         startWorkoutCmd();
+
+        mRootContentLayout = (FrameLayout)findViewById(R.id.root_content_layout);
 
         deviceBatteryStateImage = (ImageButton) findViewById(R.id.deviceBatteryState);
         setImageView = (ImageView)findViewById(R.id.setImage);
@@ -189,6 +195,8 @@ public class WorkoutActivity extends BaseAppCompatActivity {
             }
         }, 300, 100);
 
+        setSoundPool();
+        registerReceiver(mExerciseBroadcastReceiver, makeExerciseDataIntentFilter());
         registerReceiver(mAngleBroadcastReceiver, makeAngletDataIntentFilter());
         registerReceiver(mCountBroadcastReceiver, makeCountDataIntentFilter());
     }
@@ -206,6 +214,33 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                 break;
         }
     }
+
+    private void setSoundPool() {
+
+        if (Build.VERSION.SDK_INT < 21 /* Android 5.0 */) {
+            soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        }
+        else {
+            soundPool = new SoundPool.Builder()
+                    .setMaxStreams(10)
+                    .build();
+        }
+        this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId,int status) {
+                AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+                float actualVolume = (float) audioManager
+                        .getStreamVolume(AudioManager.STREAM_MUSIC);
+                float maxVolume = (float) audioManager
+                        .getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                float volume = actualVolume / maxVolume;
+                soundPool.play(soundID, volume, volume, 1, 0, 1f);
+            }
+        });
+    }
+
 
     private void saveWorkoutData() {
         WorkoutVo data = mWorkoutList.get(exerciseNum);
@@ -294,13 +329,29 @@ public class WorkoutActivity extends BaseAppCompatActivity {
             timer = null;
         }
 
+        if(null != mExerciseBroadcastReceiver) {
+            unregisterReceiver(mExerciseBroadcastReceiver);
+        }
+
         if(null != mAngleBroadcastReceiver) {
             unregisterReceiver(mAngleBroadcastReceiver);
         }
         if(null != mCountBroadcastReceiver) {
             unregisterReceiver(mCountBroadcastReceiver);
         }
+
+        if(null != soundPool) {
+            soundPool.release();
+            soundPool = null;
+        }
     }
+
+    private IntentFilter makeExerciseDataIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(UARTService.ACTION_RECEIVE_EXERCISE_DATA);
+        return intentFilter;
+    }
+
 
     private IntentFilter makeAngletDataIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
@@ -313,6 +364,28 @@ public class WorkoutActivity extends BaseAppCompatActivity {
         intentFilter.addAction(UARTService.ACTION_RECEIVE_COUNT_DATA);
         return intentFilter;
     }
+
+
+    protected BroadcastReceiver mExerciseBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String exerciseName = intent.getStringExtra(UARTService.ACTION_RECEIVE_EXERCISE_DATA_CODE);
+                    WorkoutVo data = mWorkoutList.get(exerciseNum);
+
+                    DebugLogger.d(TAG, "mExerciseBroadcastReceiver receive exerciseName = " + exerciseName);
+
+                    if(false == data.getExerciseName().equals(exerciseName)) {
+                        countTextView.setTextColor(ContextCompat.getColor(mContext,  R.color.red_80));
+                    }else {
+                        countTextView.setTextColor(ContextCompat.getColor(mContext,  R.color.white));
+                    }
+                }
+            });
+        }
+    };
 
     boolean isCountRecevied = false;
     protected BroadcastReceiver mAngleBroadcastReceiver = new BroadcastReceiver() {
@@ -374,12 +447,13 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                     mGuageBar.setClippingAngle(135 + clip);
 
                     if(angle > 0) {
-                        angleLeftRightTextView.setText(getString(R.string.text_angle_left));
-                        mAngleBar.setStartAngle(180);
-                        mAngleBar.setClippingAngle(Math.abs(angle));
-                    }else {
                         angleLeftRightTextView.setText(getString(R.string.text_angle_right));
                         mAngleBar.setStartAngle(0);
+                        mAngleBar.setClippingAngle(angle);
+                    }else {
+                        angleLeftRightTextView.setText(getString(R.string.text_angle_left));
+                        mAngleBar.setStartAngle(180);
+                        mAngleBar.setClippingAngle(180 - Math.abs(angle));
                     }
                     angleTextView.setText(getString(R.string.text_angle, angle));
                     mAngleNiddle.setRotation(angle);
@@ -413,26 +487,32 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 
                     WorkoutVo data = mWorkoutList.get(exerciseNum);
                     mCount = count;
-                    if(count > data.getReps()) {
-                        return;
-                    }
 
-                    int tmp = 0;
+                    int tmp = count%10;
+
+                    int resId = getResources().getIdentifier("count_" + tmp, "raw", mContext. getPackageName());
+                    soundID = soundPool.load(mContext, resId, 1);
+
+                    tmp = 0;
                     if(count -1 <= 0) {
                         tmp = 1;
                     }else {
                         tmp = count;
                     }
 
-                    mAccuracy[tmp-1] = accuracy;
+                    if(tmp >= (data.getReps()-1)) {
+                        tmp = data.getReps() -1;
+                    }
+
+//                    mAccuracy[tmp-1] = accuracy;
                     countTextView.setTextColor(Color.WHITE);
                     countTextView.setText(String.valueOf(count));
 
-                    if(mCount == data.getReps()) {
-                        unregisterReceiver(mCountBroadcastReceiver);
-                        mCountBroadcastReceiver = null;
-                        nextStep();
-                    }
+//                    if(mCount >= data.getReps()) {
+//                        unregisterReceiver(mCountBroadcastReceiver);
+//                        mCountBroadcastReceiver = null;
+//                        nextStep();
+//                    }
                 }
             });
         }
@@ -482,7 +562,4 @@ public class WorkoutActivity extends BaseAppCompatActivity {
         super.onBackPressed();
     }
 
-    public  void stopWorkoutCmd() {
-        mApplication.send(CmdConst.CMD_REQUEST_STOP, (byte)0, null);
-    }
 }

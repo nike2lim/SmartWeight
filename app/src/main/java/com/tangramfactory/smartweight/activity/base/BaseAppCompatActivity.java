@@ -14,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.tangramfactory.smartweight.SmartWeightApplication;
+import com.tangramfactory.smartweight.activity.device.CmdConst;
 import com.tangramfactory.smartweight.ble.scanner.BootloaderScanner;
 import com.tangramfactory.smartweight.ble.service.BleProfileService;
 import com.tangramfactory.smartweight.utility.DebugLogger;
@@ -157,4 +158,13 @@ public class BaseAppCompatActivity extends AppCompatActivity {
     protected void onDeviceDisconnected() {}
 
     protected void onDeviceConnected() {}
+
+    public  void stopWorkoutCmd() {
+        mApplication.send(CmdConst.CMD_REQUEST_STOP, (byte)0, null);
+    }
+
+    public  void exitWorkoutCmd() {
+        mApplication.send(CmdConst.CMD_REQUEST_EXIT, (byte)0, null);
+    }
+
 }

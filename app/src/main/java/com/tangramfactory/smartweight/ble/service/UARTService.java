@@ -34,6 +34,7 @@ import com.tangramfactory.smartweight.SmartWeightApplication;
 import com.tangramfactory.smartweight.activity.device.CmdConst;
 import com.tangramfactory.smartweight.utility.DebugLogger;
 import com.tangramfactory.smartweight.utility.SharedPreference;
+import com.tangramfactory.smartweight.utility.SmartWeightUtility;
 
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -120,6 +121,10 @@ public class UARTService extends BleProfileService implements UARTManagerCallbac
 
 	public final static String ACTION_RECEIVE_BREAK_TIME = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_BREAK_TIME";
 	public final static String ACTION_RECEIVE_BREAK_TIME_DATA = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_BREAK_TIME_DATA";
+
+
+	public final static String ACTION_RECEIVE_EXERCISE_DATA = "com.tangram.application.smartweight.uart.EXERCISE_DATA";
+	public final static String ACTION_RECEIVE_EXERCISE_DATA_CODE= "com.tangram.application.smartweight.uart.EXERCISE_DATA_CODE";
 
 
 	private final static int NOTIFICATION_ID = 349; // random
@@ -380,10 +385,9 @@ public class UARTService extends BleProfileService implements UARTManagerCallbac
 
 
 	byte[] squence = new byte[2];
-	byte[] xrr = new byte[4];
-	byte[] yrr = new byte[4];
-	byte[] zrr = new byte[4];
-	byte[] angleArr = new byte[4];
+
+	byte[] recvExerciseCode = new byte[5];
+
 	byte[] convertData = new byte[4];
 	int[] value = new int[20];
 
@@ -425,6 +429,16 @@ public class UARTService extends BleProfileService implements UARTManagerCallbac
 		switch(cmd) {
 			case CmdConst.CMD_REQUEST_START:
 				DebugLogger.d(TAG, "CmdConst.CMD_REQUEST_START ack recevied!");
+				recvExerciseCode[0] = (byte)value[3];
+				recvExerciseCode[1] = (byte)value[4];
+				recvExerciseCode[2] = (byte)value[5];
+				recvExerciseCode[3] = (byte)value[6];
+				recvExerciseCode[4] = (byte)value[7];
+
+				String exerciseName = SmartWeightUtility.getExerciseName(this, recvExerciseCode);
+
+				receivedDataBroadcast = new Intent(ACTION_RECEIVE_EXERCISE_DATA);
+				receivedDataBroadcast.putExtra(ACTION_RECEIVE_EXERCISE_DATA_CODE, exerciseName);
 				break;
 
 			case CmdConst.CMD_RESPONSE_ANGLE_DATA:

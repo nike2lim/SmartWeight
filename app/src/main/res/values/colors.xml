@@ -22,6 +22,9 @@
 
     <color name="transparent">#00000000</color>
 
+    <color name="red_80">#CCFF0000</color>
+    <color name="red_30">#4DFF0000</color>
+
 
     <color name="text_enabled">#FFFFFF</color>
     <color name="text_disabled">#33FFFFFF</color>
@@ -35,6 +38,7 @@
 
     <color name="seekbar_progress">#44c0f4</color>
     <color name="seekbar_progress_bg">#59FFFFFF</color>
+
 
 
 

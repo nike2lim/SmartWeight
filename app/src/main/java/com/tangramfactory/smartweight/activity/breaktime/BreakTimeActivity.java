@@ -297,8 +297,4 @@ public class BreakTimeActivity extends BaseAppCompatActivity {
         stopWorkoutCmd();
         super.onBackPressed();
     }
-
-    public  void stopWorkoutCmd() {
-        mApplication.send(CmdConst.CMD_REQUEST_STOP, (byte)0, null);
-    }
 }

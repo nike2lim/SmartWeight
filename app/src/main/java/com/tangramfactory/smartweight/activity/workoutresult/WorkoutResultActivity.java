@@ -57,6 +57,7 @@ public class WorkoutResultActivity extends BaseAppCompatActivity {
         toolbar.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                exitWorkoutCmd();
                 mApplication.mGuideResultVo.clear();
                 finish();
             }
@@ -94,11 +95,8 @@ public class WorkoutResultActivity extends BaseAppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        exitWorkoutCmd();
         mApplication.mGuideResultVo.clear();
         super.onBackPressed();
-    }
-
-    public  void stopWorkoutCmd() {
-        mApplication.send(CmdConst.CMD_REQUEST_STOP, (byte)0, null);
     }
 }

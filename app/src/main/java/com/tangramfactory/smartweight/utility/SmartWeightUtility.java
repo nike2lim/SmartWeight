@@ -2,6 +2,8 @@ package com.tangramfactory.smartweight.utility;
 
 
 import android.content.Context;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 
 import com.tangramfactory.smartweight.R;
 
@@ -127,7 +129,7 @@ public class SmartWeightUtility {
 			}
 		}else if(exerciseName.equals(cxt.getString(R.string.text_shoulder_press)) || exerciseName.equals(cxt.getString(R.string.text_lateral_raises)) ) {
 			exerciseCode[0] = 'B';
-			if(exerciseName.equals(cxt.getString(R.string.text_shoulder_press))) {
+			if(exerciseName.equals(cxt.getString(R.string.text_lateral_raises))) {
 				System.arraycopy(arr1, 0,  exerciseCode, 1, arr1.length);
 			}else {
 				System.arraycopy(arr2, 0,  exerciseCode, 1, arr2.length);
@@ -174,6 +176,56 @@ public class SmartWeightUtility {
 			//none
 		}
 		return exerciseCode;
+	}
+
+	public static String getExerciseName(Context context, byte[] exerciseCode) {
+		String exerciseName = "";
+		if(null == exerciseCode)		return  null;
+
+		if(exerciseCode[0] == 'A') {
+			if(exerciseCode[1] == 1) {
+				exerciseName = context.getString(R.string.text_bench_press);
+			}else {
+				exerciseName = context.getString(R.string.text_fly);
+			}
+		}else if(exerciseCode[0] == 'B') {
+			if(exerciseCode[1] == 1) {
+				exerciseName = context.getString(R.string.text_lateral_raises);
+			}else {
+				exerciseName = context.getString(R.string.text_shoulder_press);
+			}
+		}else if(exerciseCode[0] == 'C') {
+			exerciseName = context.getString(R.string.text_curl);
+		}else if(exerciseCode[0] == 'D') {
+			if(exerciseCode[1] == 1) {
+				exerciseName = context.getString(R.string.text_cable_pushdown);
+			}else {
+				exerciseName = context.getString(R.string.text_kick_back);
+			}
+		}else if(exerciseCode[0] == 'E') {
+			if(exerciseCode[1] == 1) {
+				exerciseName = context.getString(R.string.text_row);
+			}else {
+				exerciseName = context.getString(R.string.text_lat_pulldown);
+			}
+		}else if(exerciseCode[0] == 'F') {
+			exerciseName = context.getString(R.string.text_sit_up);
+		}else if(exerciseCode[0] == 'G') {
+			if(exerciseCode[1] == 1) {
+				exerciseName = context.getString(R.string.text_back_extension);
+			}else {
+				exerciseName = context.getString(R.string.text_deadlift);
+			}
+		}else if(exerciseCode[0] == 'H') {
+			if(exerciseCode[1] == 1) {
+				exerciseName = context.getString(R.string.text_lunge);
+			}else {
+				exerciseName = context.getString(R.string.text_squat);
+			}
+		}else if(exerciseCode[0] == 'Z') {
+			exerciseName = context.getString(R.string.text_plank);
+		}
+		return exerciseName;
 	}
 
 

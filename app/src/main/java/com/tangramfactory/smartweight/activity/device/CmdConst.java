@@ -10,6 +10,7 @@ public class CmdConst {
     public final static byte CMD_REQUEST_START              = 10;
     public final static byte CMD_REQUEST_BREAK              = 11;
     public final static byte CMD_REQUEST_STOP               = 12;
+    public final static byte CMD_REQUEST_EXIT               = 14;
 
 
     public final static byte CMD_RESPONSE_BATTERY           = 4;

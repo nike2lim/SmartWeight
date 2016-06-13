@@ -1,6 +1,9 @@
 package com.tangramfactory.smartweight.activity.workoutready;
 
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +17,7 @@ import com.tangramfactory.smartweight.SmartWeightApplication;
 import com.tangramfactory.smartweight.activity.base.BaseAppCompatActivity;
 import com.tangramfactory.smartweight.activity.device.CmdConst;
 import com.tangramfactory.smartweight.activity.workout.WorkoutActivity;
+import com.tangramfactory.smartweight.utility.DebugLogger;
 import com.tangramfactory.smartweight.utility.SmartWeightUtility;
 import com.tangramfactory.smartweight.vo.WorkoutVo;
 
@@ -37,6 +41,9 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
     private int exerciseNum;
     ArrayList<WorkoutVo> mWorkoutList = new ArrayList<>();
 
+    private SoundPool soundPool;
+    private int soundID;
+    boolean loaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +83,36 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
 
         exerciseNumTextView = (TextView)findViewById(R.id.exerciseNum);
         exerciseNumTextView.setText(getString(R.string.text_per_exercise, exerciseNum+1, mWorkoutList.size()));
+
+
+        if (Build.VERSION.SDK_INT < 21 /* Android 5.0 */) {
+            soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        }
+        else {
+            soundPool = new SoundPool.Builder()
+                    .setMaxStreams(10)
+                    .build();
+        }
+        this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId,int status) {
+                loaded = true;
+
+                AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+                float actualVolume = (float) audioManager
+                        .getStreamVolume(AudioManager.STREAM_MUSIC);
+                float maxVolume = (float) audioManager
+                        .getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                float volume = actualVolume / maxVolume;
+                soundPool.play(soundID, volume, volume, 1, 0, 1f);
+            }
+        });
+
+
+        int resId = getResources().getIdentifier("count_" + time_count, "raw", mContext. getPackageName());
+        soundID = soundPool.load(this, resId, 1);
     }
 
     Handler mTimeCheck = new Handler(new Handler.Callback() {
@@ -85,6 +122,9 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
                 case MSG_ID_TIME_COUNT:
                     time_count--;
                     if(time_count > 0) {
+                        int resId = getResources().getIdentifier("count_" + time_count, "raw", mContext. getPackageName());
+                        soundID = soundPool.load(mContext, resId, 1);
+
                         timeCountTextView.setText(String.valueOf(time_count));
                         Message sendMsg = Message.obtain();
                         sendMsg.what = MSG_ID_TIME_COUNT;
@@ -118,6 +158,12 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        if(null != soundPool) {
+            soundPool.release();
+            soundPool = null;
+        }
+
         mTimeCheck.removeMessages(MSG_ID_TIME_COUNT);
         mTimeCheck = null;
     }
@@ -165,9 +211,5 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
     public void onBackPressed() {
         stopWorkoutCmd();
         super.onBackPressed();
-    }
-
-    public  void stopWorkoutCmd() {
-        mApplication.send(CmdConst.CMD_REQUEST_STOP, (byte)0, null);
     }
 }
