@@ -17,6 +17,8 @@ public class SplashActivity extends BaseAppCompatActivity {
         setContentView(R.layout.activity_splash);
         mApplication.isShutDown = false;
 
+        mApplication.mGuideResultVo.clear();
+
 //        if (!UUIDCryptoUtils.hasUUIDFile()) {
 //            UUIDCryptoUtils.makeDeviceUUID();
 //        }

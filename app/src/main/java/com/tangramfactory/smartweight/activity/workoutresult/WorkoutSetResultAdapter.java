@@ -110,14 +110,10 @@ public class WorkoutSetResultAdapter extends HeaderRecyclerViewAdapter implement
         listItemViewHolder.totalTime.setText(model.getTotalTime());
 
         if(null != infoList) {
-//            for(GuideResultVo.SetInfo info : infoList) {
             for(int i=0; i < infoList.size(); i++) {
                 GuideResultVo.SetInfo info = infoList.get(i);
                 listItemViewHolder.weightUnit.setText(info.getWeightUnit());
-
-
                 listItemViewHolder.setCountText[i].setText(info.getSetNum() + " set");
-
                 listItemViewHolder.weightText[i].setText(info.getWeight());
                 listItemViewHolder.repsPerTotalText[i].setText(info.getResultReps() + "/" + info.getTotalReps());
                 listItemViewHolder.accuracyText[i].setText(info.getAccuracy());
@@ -198,6 +194,7 @@ public class WorkoutSetResultAdapter extends HeaderRecyclerViewAdapter implement
         TextView[] accuracyText  = new TextView[3];
         ProgressBar progressBar;
 
+
         public ListItemViewHolder(View itemView) {
             super(itemView);
 
@@ -211,13 +208,14 @@ public class WorkoutSetResultAdapter extends HeaderRecyclerViewAdapter implement
             Context context = itemView.getContext();
 
             for(int i=0; i < 3; i++) {
+
                 int resId = context.getResources().getIdentifier("set"+(i+1), "id", context.getPackageName());
                 LinearLayout setLayout = (LinearLayout)itemView.findViewById(resId);
 
                 setCountText[i] = (TextView)setLayout.findViewById(R.id.set_count);
-                weightText[i] = (TextView)itemView.findViewById(R.id.weight);
-                repsPerTotalText[i] = (TextView)itemView.findViewById(R.id.reps_per_total);
-                accuracyText[i] = (TextView)itemView.findViewById(R.id.accuracy);
+                weightText[i] = (TextView)setLayout.findViewById(R.id.weight);
+                repsPerTotalText[i] = (TextView)setLayout.findViewById(R.id.reps_per_total);
+                accuracyText[i] = (TextView)setLayout.findViewById(R.id.accuracy);
             }
         }
     }

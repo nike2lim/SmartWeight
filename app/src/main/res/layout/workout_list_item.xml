@@ -4,10 +4,10 @@
     android:layout_height="wrap_content"
     android:background="#000000"
     android:clickable="true"
+    android:id="@+id/rootLayout"
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/rootLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -61,6 +61,7 @@
         />
 
     <LinearLayout
+        android:id="@+id/setinfo_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="13dp"
@@ -120,6 +121,7 @@
                 android:text="accuracy"/>
         </LinearLayout>
     </LinearLayout>
+
 
     <include
         android:id="@+id/set1"

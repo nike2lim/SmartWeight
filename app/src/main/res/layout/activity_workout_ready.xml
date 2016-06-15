@@ -109,6 +109,7 @@
         android:layout_marginBottom="25dp">
 
         <ImageButton
+            android:id="@+id/exercise_list_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"

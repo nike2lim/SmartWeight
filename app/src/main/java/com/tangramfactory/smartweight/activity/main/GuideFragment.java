@@ -77,6 +77,8 @@ public class GuideFragment extends Fragment{
     }
 
     private void loadCodeView(View v) {
+        DebugLogger.d(TAG, "GuideFragment loadCodeView!");
+
         levelViewPagerLayout = (LinearLayout)v.findViewById(R.id.viewPayer_layout);
         levelViewPager = (ViewPager)v.findViewById(R.id.viewpager_default);
         LevelAdapter customPagerAdapter = new LevelAdapter(getActivity().getSupportFragmentManager());
@@ -132,8 +134,14 @@ public class GuideFragment extends Fragment{
         recyclerView.setLayoutManager(layoutManager);
 
         dummyGuideStepData();
-        adapter = new GuideStepAdapter(dummyGuideStepList);
-        recyclerView.setAdapter(adapter);
+
+        if(null == adapter) {
+            adapter = new GuideStepAdapter(dummyGuideStepList);
+        }
+
+        if(null == recyclerView.getAdapter()) {
+            recyclerView.setAdapter(adapter);
+        }
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -427,6 +435,8 @@ public class GuideFragment extends Fragment{
     List<GuideStepVo> dummyGuideStepList = new ArrayList<GuideStepVo>();
 
     private void dummyGuideStepData() {
+        if(dummyGuideStepList.size() > 0)       return;
+
         dummyWorkoutData();
 
         GuideStepVo obj = new GuideStepVo("1", "2", "12", true, dummyWorkoutList);
@@ -452,17 +462,17 @@ public class GuideFragment extends Fragment{
 //        4. Å±¹é
 //        5. ·±Áö
 
-        WorkoutVo obj = new WorkoutVo(getString(R.string.text_curl),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
-        WorkoutVo obj2 = new WorkoutVo(getString(R.string.text_lateral_raises),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
-        WorkoutVo obj3 = new WorkoutVo(getString(R.string.text_shoulder_press),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
-        WorkoutVo obj4 = new WorkoutVo(getString(R.string.text_kick_back),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
-        WorkoutVo obj5= new WorkoutVo(getString(R.string.text_lunge),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
+        WorkoutVo obj = new WorkoutVo(getString(R.string.text_curl),"Dumbell", 5, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 3);
+//        WorkoutVo obj2 = new WorkoutVo(getString(R.string.text_lateral_raises),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
+//        WorkoutVo obj3 = new WorkoutVo(getString(R.string.text_shoulder_press),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
+//        WorkoutVo obj4 = new WorkoutVo(getString(R.string.text_kick_back),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
+//        WorkoutVo obj5= new WorkoutVo(getString(R.string.text_lunge),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
 
         dummyWorkoutList.add(obj);
-        dummyWorkoutList.add(obj2);
-        dummyWorkoutList.add(obj3);
-        dummyWorkoutList.add(obj4);
-        dummyWorkoutList.add(obj5);
+//        dummyWorkoutList.add(obj2);
+//        dummyWorkoutList.add(obj3);
+//        dummyWorkoutList.add(obj4);
+//        dummyWorkoutList.add(obj5);
     }
 
     @Override

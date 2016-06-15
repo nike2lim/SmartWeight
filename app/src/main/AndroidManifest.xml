@@ -42,6 +42,7 @@
         </activity>
         <activity
             android:name=".activity.main.MainActivity"
+            android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.workoutpreview.WorkoutPreviewActivity"

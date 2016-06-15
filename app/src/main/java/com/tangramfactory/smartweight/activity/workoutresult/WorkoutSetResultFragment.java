@@ -1,5 +1,8 @@
 package com.tangramfactory.smartweight.activity.workoutresult;
 
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -27,6 +30,9 @@ public class WorkoutSetResultFragment extends BaseWorkoutResultFragment {
 
     RecyclerView recyclerView;
     WorkoutSetResultAdapter adapter;
+
+    private SoundPool soundPool;
+    private int soundID;
 
     @Nullable
     @Override
@@ -78,6 +84,7 @@ public class WorkoutSetResultFragment extends BaseWorkoutResultFragment {
                 DebugLogger.d(TAG, adapter.getItem(position).getExerciseName());
             }
         }));
+        setSoundPool();
         return view;
     }
 
@@ -91,6 +98,45 @@ public class WorkoutSetResultFragment extends BaseWorkoutResultFragment {
         super.onResume();
     }
 
+
+    private void setSoundPool() {
+
+        if (Build.VERSION.SDK_INT < 21 /* Android 5.0 */) {
+            soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        }
+        else {
+            soundPool = new SoundPool.Builder()
+                    .setMaxStreams(10)
+                    .build();
+        }
+        getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int sampleId,int status) {
+                AudioManager audioManager = (AudioManager)getActivity().getSystemService(getActivity().AUDIO_SERVICE);
+                float actualVolume = (float) audioManager
+                        .getStreamVolume(AudioManager.STREAM_MUSIC);
+                float maxVolume = (float) audioManager
+                        .getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                float volume = actualVolume / maxVolume;
+                soundPool.play(soundID, volume, volume, 1, 0, 1f);
+            }
+        });
+
+
+        int resId = getResources().getIdentifier("finish", "raw", getActivity().getPackageName());
+        soundID = soundPool.load(getActivity(), resId, 1);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if(null != soundPool) {
+            soundPool.release();
+            soundPool = null;
+        }
+    }
 
     List<GuideResultVo> dummyList = new ArrayList<>();
     private void setDummyResultData() {

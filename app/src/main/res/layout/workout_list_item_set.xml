@@ -38,7 +38,7 @@
                 android:textColor="@color/white"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="20kg"/>
+                android:text="-"/>
 
             <TextView
                 android:id="@+id/reps_per_total"
@@ -51,7 +51,7 @@
                 android:textColor="@color/white"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="8/10"/>
+                android:text="-"/>
 
             <TextView
                 android:id="@+id/accuracy"
@@ -63,7 +63,7 @@
                 android:textColor="@color/white"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="80%"/>
+                android:text="-"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -89,7 +89,13 @@ public class BreakTimeActivity extends BaseAppCompatActivity {
         timeCountTextView = (TextView)findViewById(R.id.break_time_sec);
         NextButton = (ImageButton)findViewById(R.id.next_btn);
 
-        WorkoutVo data = mWorkoutList.get(exerciseNum+1);
+        WorkoutVo data = null;
+
+        if((exerciseNum+1) >= (mWorkoutList.size())-1) {
+            data = mWorkoutList.get(exerciseNum);
+        }else {
+            data = mWorkoutList.get(exerciseNum+1);
+        }
 
         perSetTextView = (TextView)findViewById(R.id.text_per_set);
         nextExerciseTextView = (TextView)findViewById(R.id.next_exercise);
@@ -193,7 +199,8 @@ public class BreakTimeActivity extends BaseAppCompatActivity {
             data.setCurrentSetNum(setNum);
             mWorkoutList.set(exerciseNum , data);
 
-            Intent intent = new Intent(mContext, WorkoutActivity.class);
+//            Intent intent = new Intent(mContext, WorkoutActivity.class);
+            Intent intent = new Intent(mContext, WorkoutReadyActivity.class);
             intent.putExtra("stepNum", stepNum);
             intent.putExtra("exerciseNum", exerciseNum);
             intent.putExtra("exerciseList", mWorkoutList);
@@ -230,9 +237,16 @@ public class BreakTimeActivity extends BaseAppCompatActivity {
     }
 
     public void breakTimeEndCommnad() {
-        byte[] blankByte = new byte[4];
+        final byte[] blankByte = new byte[4];
         Arrays.fill(blankByte, (byte)0);
-        mApplication.send(CmdConst.CMD_REQUEST_BREAK, (byte)4, blankByte);
+
+        new Handler(getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mApplication.send(CmdConst.CMD_REQUEST_BREAK, (byte)4, blankByte);
+            }
+        }, 400);
+
     }
 
     private IntentFilter makeBreakTimeDataIntentFilter() {

@@ -13,6 +13,7 @@ import com.tangramfactory.smartweight.R;
 import com.tangramfactory.smartweight.SmartWeightApplication;
 import com.tangramfactory.smartweight.activity.base.BaseAppCompatActivity;
 import com.tangramfactory.smartweight.activity.device.ScanActivity;
+import com.tangramfactory.smartweight.activity.workoutready.WorkoutReadyActivity;
 import com.tangramfactory.smartweight.utility.SmartWeightUtility;
 import com.tangramfactory.smartweight.vo.WorkoutVo;
 
@@ -295,23 +296,30 @@ public class WorkoutPreviewActivity extends BaseAppCompatActivity implements Vie
                 break;
 
             case R.id.startButton:
-                if(mApplication.isConnected() == false) {
-                    Intent intent = new Intent(mContext, ScanActivity.class);
-                    intent.putExtra("stepNum", stepNum);
-                    intent.putExtra("exerciseNum", exerciseNum);
-                    intent.putExtra("exerciseList", mWorkoutList);
-                    startActivity(intent);
-                    finish();
-                }else {
-//                    Intent intent = new Intent(this, WorkoutReadyActivity.class);
-                    Intent intent = new Intent(mContext, ScanActivity.class);
-                    intent.putExtra("isConnected", mApplication.isConnected());
-                    intent.putExtra("stepNum", stepNum);
-                    intent.putExtra("exerciseNum", exerciseNum);
-                    intent.putExtra("exerciseList", mWorkoutList);
-                    startActivity(intent);
-                    finish();
-                }
+                Intent intent = new Intent(mContext, WorkoutReadyActivity.class);
+                intent.putExtra("stepNum", stepNum);
+                intent.putExtra("exerciseNum", exerciseNum);
+                intent.putExtra("exerciseList", mWorkoutList);
+                startActivity(intent);
+
+
+//                if(mApplication.isConnected() == false) {
+//                    Intent intent = new Intent(mContext, ScanActivity.class);
+//                    intent.putExtra("stepNum", stepNum);
+//                    intent.putExtra("exerciseNum", exerciseNum);
+//                    intent.putExtra("exerciseList", mWorkoutList);
+//                    startActivity(intent);
+//                    finish();
+//                }else {
+////                    Intent intent = new Intent(this, WorkoutReadyActivity.class);
+//                    Intent intent = new Intent(mContext, ScanActivity.class);
+//                    intent.putExtra("isConnected", mApplication.isConnected());
+//                    intent.putExtra("stepNum", stepNum);
+//                    intent.putExtra("exerciseNum", exerciseNum);
+//                    intent.putExtra("exerciseList", mWorkoutList);
+//                    startActivity(intent);
+//                    finish();
+//                }
                 break;
         }
     }

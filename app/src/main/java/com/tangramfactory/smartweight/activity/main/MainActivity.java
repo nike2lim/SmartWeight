@@ -92,6 +92,16 @@ public class MainActivity extends BaseAppCompatActivity  implements GestureDetec
         GuideFragment guideFragment = (GuideFragment) fm.findFragmentByTag("Guide");
         android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
 
+        List<android.support.v4.app.Fragment> fragmentList =  fm.getFragments();
+        if(null != fragmentList) {
+            for(int i= 0; i <  fragmentList.size(); i++){
+                android.support.v4.app.Fragment fragment = fragmentList.get(i);
+                if(fragment instanceof TextFragment) {
+                    ft.detach(fragment);
+                }
+            }
+        }
+
         if(guideFragment!=null)
             ft.detach(guideFragment);
 

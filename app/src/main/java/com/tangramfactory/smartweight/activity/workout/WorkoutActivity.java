@@ -5,10 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -104,7 +108,6 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 
     protected void loadCodeView() {
         startWorkoutCmd();
-
         mRootContentLayout = (FrameLayout)findViewById(R.id.root_content_layout);
 
         deviceBatteryStateImage = (ImageButton) findViewById(R.id.deviceBatteryState);
@@ -209,6 +212,10 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 
     public void onViewClick(View view) {
         switch (view.getId()) {
+            case R.id.exercise_list_btn:
+                onBackPressed();
+                break;
+
             case R.id.next_btn:
                 nextStep();
                 break;
@@ -239,6 +246,10 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                 soundPool.play(soundID, volume, volume, 1, 0, 1f);
             }
         });
+
+        int resId = getResources().getIdentifier("go", "raw", mContext. getPackageName());
+        soundID = soundPool.load(mContext, resId, 1);
+
     }
 
 
@@ -254,7 +265,20 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 //        }
 
         int progress =(int) (((float)mCount / (float)data.getReps()) * 100);
-        GuideResultVo resultVo = new GuideResultVo(progress, data.getExerciseName(), startTime);
+
+        GuideResultVo resultVo = null;
+
+        boolean isExistData = false;
+        for(GuideResultVo vo : mApplication.mGuideResultVo) {
+            if(vo.getExerciseName().equals(data.getExerciseName())) {
+                resultVo = vo;
+                isExistData = true;
+            }
+        }
+
+        if(false == isExistData) {
+            resultVo = new GuideResultVo(progress, data.getExerciseName(), startTime);
+        }
 
         int accuracy = 0;
 
@@ -301,14 +325,34 @@ public class WorkoutActivity extends BaseAppCompatActivity {
             resultVo.setTotalTime(totalTime);
         }
 
-        mApplication.mGuideResultVo.add(resultVo);
+//        for(GuideResultVo vo : mApplication.mGuideResultVo) {
+//
+//                resultVo = vo;
+//                isExistData = true;
+//            }
+//        }
+
+        isExistData = false;
+        for(int i=0; i <  mApplication.mGuideResultVo.size() ; i++) {
+            GuideResultVo vo =  mApplication.mGuideResultVo.get(i);
+            if(vo.getExerciseName().equals(data.getExerciseName())) {
+                mApplication.mGuideResultVo.set(i, vo);
+                isExistData = true;
+            }
+        }
+
+        if(false == isExistData) {
+            mApplication.mGuideResultVo.add(resultVo);
+        }
     }
 
     private void nextStep() {
         endTime = DateTime.now(DateTimeZone.UTC);
         saveWorkoutData();
 
-        if(exerciseNum == (mWorkoutList.size()-1)) {
+        WorkoutVo data = mWorkoutList.get(exerciseNum);
+
+        if(data.getCurrentSetNum() == (data.getTotalSetNum() -1) && exerciseNum == (mWorkoutList.size()-1)) {
             startActivity(new Intent(this, WorkoutResultActivity.class));
             finish();
         } else {
@@ -446,6 +490,14 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                     mGuageNiddle.setRotation(45 + clip);
                     mGuageBar.setClippingAngle(135 + clip);
 
+
+//                    mRootContentLayout.setBackgroundColor(ContextCompat.getColor(mContext,  R.color.black));
+//                    if(angle ==0) {
+//                        mRootContentLayout.setBackgroundColor(ContextCompat.getColor(mContext,  R.color.black));
+//                    }else {
+//                        mRootContentLayout.setBackgroundColor(ContextCompat.getColor(mContext,  R.color.red_30));
+//                    }
+
                     if(angle > 0) {
                         angleLeftRightTextView.setText(getString(R.string.text_angle_right));
                         mAngleBar.setStartAngle(0);
@@ -488,6 +540,10 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                     WorkoutVo data = mWorkoutList.get(exerciseNum);
                     mCount = count;
 
+                    if(count > data.getReps()) {
+                        return;
+                    }
+
                     int tmp = count%10;
 
                     int resId = getResources().getIdentifier("count_" + tmp, "raw", mContext. getPackageName());
@@ -504,15 +560,15 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                         tmp = data.getReps() -1;
                     }
 
-//                    mAccuracy[tmp-1] = accuracy;
+                    mAccuracy[tmp-1] = accuracy;
                     countTextView.setTextColor(Color.WHITE);
                     countTextView.setText(String.valueOf(count));
 
-//                    if(mCount >= data.getReps()) {
-//                        unregisterReceiver(mCountBroadcastReceiver);
-//                        mCountBroadcastReceiver = null;
-//                        nextStep();
-//                    }
+                    if(mCount >= data.getReps()) {
+                        unregisterReceiver(mCountBroadcastReceiver);
+                        mCountBroadcastReceiver = null;
+                        nextStep();
+                    }
                 }
             });
         }

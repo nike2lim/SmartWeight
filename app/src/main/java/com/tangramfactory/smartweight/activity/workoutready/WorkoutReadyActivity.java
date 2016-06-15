@@ -43,7 +43,6 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
 
     private SoundPool soundPool;
     private int soundID;
-    boolean loaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +74,7 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
         timeCountTextView.setText(String.valueOf(time_count));
         Message msg = Message.obtain();
         msg.what = MSG_ID_TIME_COUNT;
-        mTimeCheck.sendMessageDelayed(msg, 1000);
+        mTimeCheck.sendMessageDelayed(msg, 1500);
 
         stepNum = getIntent().getIntExtra("stepNum", 0);
         exerciseNum = getIntent().getIntExtra("exerciseNum", 0);
@@ -84,7 +83,10 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
         exerciseNumTextView = (TextView)findViewById(R.id.exerciseNum);
         exerciseNumTextView.setText(getString(R.string.text_per_exercise, exerciseNum+1, mWorkoutList.size()));
 
+        setSoundPool();
+    }
 
+    private void setSoundPool() {
         if (Build.VERSION.SDK_INT < 21 /* Android 5.0 */) {
             soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
         }
@@ -98,7 +100,6 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
             public void onLoadComplete(SoundPool soundPool, int sampleId,int status) {
-                loaded = true;
 
                 AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
                 float actualVolume = (float) audioManager
@@ -110,8 +111,8 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
             }
         });
 
-
-        int resId = getResources().getIdentifier("count_" + time_count, "raw", mContext. getPackageName());
+//        int resId = getResources().getIdentifier("count_" + time_count, "raw", mContext. getPackageName());
+        int resId = getResources().getIdentifier("ready", "raw", mContext. getPackageName());
         soundID = soundPool.load(this, resId, 1);
     }
 
@@ -120,7 +121,6 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case MSG_ID_TIME_COUNT:
-                    time_count--;
                     if(time_count > 0) {
                         int resId = getResources().getIdentifier("count_" + time_count, "raw", mContext. getPackageName());
                         soundID = soundPool.load(mContext, resId, 1);
@@ -129,6 +129,7 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
                         Message sendMsg = Message.obtain();
                         sendMsg.what = MSG_ID_TIME_COUNT;
                         mTimeCheck.sendMessageDelayed(sendMsg, 1000);
+                        time_count--;
                     }else {
                         timeCountTextView.setText(String.valueOf(time_count));
                         mTimeCheck.removeMessages(MSG_ID_TIME_COUNT);
@@ -148,6 +149,10 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
 
     public void onClick(View view) {
         switch(view.getId()) {
+            case R.id.exercise_list_btn :
+                finish();
+                break;
+
             case R.id.next_btn:
                 mTimeCheck.removeMessages(MSG_ID_TIME_COUNT);
                 startWorkoutActivity();
