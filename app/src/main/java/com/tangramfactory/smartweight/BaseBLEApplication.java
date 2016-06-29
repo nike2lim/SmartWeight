@@ -47,10 +47,7 @@ public class BaseBLEApplication<E extends BleProfileService.LocalBinder> extends
             mServiceBinder.send(msg);
     }
 
-    byte[] requestBuffer = new byte[CmdConst.REQUEST_CMD_SIZE];
-
     public void send(byte cmd, byte cmdLen, byte[] payload) {
-        Arrays.fill( requestBuffer, (byte) 0);
         byte[] commandByte = new byte[3 + cmdLen + 1];
 
         byte req = (byte)(0<<7);
@@ -75,7 +72,6 @@ public class BaseBLEApplication<E extends BleProfileService.LocalBinder> extends
 
         commandByte[commandByte.length-1] = cheksum;
 
-//        requestBuffer[19] = 0;
 
         if (mServiceBinder != null && mServiceBinder.isConnected())
             mServiceBinder.send(commandByte);
@@ -112,6 +108,15 @@ public class BaseBLEApplication<E extends BleProfileService.LocalBinder> extends
     public void onCreate() {
         super.onCreate();
         mContext = this;
+
+        if(null == mServiceBinder) {
+            DebugLogger.d(TAG, "mServiceBinder null!!!");
+        }
+
+        if(null != mServiceBinder) {
+            DebugLogger.d(TAG, "mServiceBinder.isConnected() =" + mServiceBinder.isConnected());
+        }
+
         if (mServiceBinder == null || !mServiceBinder.isBinderAlive() || !mServiceBinder.isConnected()) {
             serviceIntent = new Intent(this, getServiceClass());
             if (bindService(serviceIntent, mServiceConnection, BIND_AUTO_CREATE))
@@ -146,6 +151,7 @@ public class BaseBLEApplication<E extends BleProfileService.LocalBinder> extends
     public void startScan(final int scanMode) {
         if (!isShutDown && !isUserForceDisconnected) {
 
+            DebugLogger.d(TAG, "startScan !!");
             String deviceAddress = SharedPreference.getInstance(mContext).getValue("DeviceAddress", "NONE");
 
             switch (scanMode) {

@@ -11,13 +11,14 @@ android {
     defaultConfig {
         applicationId "com.tangramfactory.smartweight"
         minSdkVersion 18
+        targetSdkVersion 18
         multiDexEnabled true
         versionCode 1
         versionName "1.0"
     }
 
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

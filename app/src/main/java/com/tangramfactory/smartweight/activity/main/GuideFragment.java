@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.tangramfactory.smartweight.R;
 import com.tangramfactory.smartweight.SmartWeightApplication;
@@ -38,7 +38,7 @@ import it.carlom.stikkyheader.core.animator.HeaderStikkyAnimator;
 
 
 /**
- * Created by B on 2016-05-23.
+ * Created by Shlim on 2016-05-23.
  */
 public class GuideFragment extends Fragment{
     protected static final String TAG = SmartWeightApplication.BASE_TAG + "GuideFragment";
@@ -102,13 +102,18 @@ public class GuideFragment extends Fragment{
             @Override
             public void onPageSelected(int position) {
                 DebugLogger.d(TAG, "Current selected = " + position);
-                if(position%3 == 0) {
-                    headerImageView.setImageResource(R.drawable.level_03);
-                }else if(position%2 == 0) {
-                    headerImageView.setImageResource(R.drawable.level_02);
-                }else {
+                if(position == 0) {
                     headerImageView.setImageResource(R.drawable.level_01);
+                }else {
+                    headerImageView.setImageResource(R.drawable.level_02);
                 }
+//                if(position%3 == 0) {
+//                    headerImageView.setImageResource(R.drawable.level_03);
+//                }else if(position%2 == 0) {
+//                    headerImageView.setImageResource(R.drawable.level_02);
+//                }else {
+//                    headerImageView.setImageResource(R.drawable.level_01);
+//                }
 
                 if(position > 0) {
                     showLockLevel();
@@ -286,27 +291,27 @@ public class GuideFragment extends Fragment{
 //                break;
 
             case R.id.exercise_1:
-                Toast.makeText(getActivity(), "exercise_1 click!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "exercise_1 click!", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.exercise_2:
-                Toast.makeText(getActivity(), "exercise_2 click!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "exercise_2 click!", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.exercise_3:
-                Toast.makeText(getActivity(), "exercise_3 click!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "exercise_3 click!", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.exercise_4:
-                Toast.makeText(getActivity(), "exercise_4 click!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "exercise_4 click!", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.exercise_5:
-                Toast.makeText(getActivity(), "exercise_5 click!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "exercise_5 click!", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.exercise_6:
-                Toast.makeText(getActivity(), "exercise_6 click!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "exercise_6 click!", Toast.LENGTH_SHORT).show();
                 break;
 
         }
@@ -462,7 +467,7 @@ public class GuideFragment extends Fragment{
 //        4. Å±¹é
 //        5. ·±Áö
 
-        WorkoutVo obj = new WorkoutVo(getString(R.string.text_curl),"Dumbell", 5, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 3);
+        WorkoutVo obj = new WorkoutVo(getString(R.string.text_curl),"Dumbell", 8, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 3);
 //        WorkoutVo obj2 = new WorkoutVo(getString(R.string.text_lateral_raises),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
 //        WorkoutVo obj3 = new WorkoutVo(getString(R.string.text_shoulder_press),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
 //        WorkoutVo obj4 = new WorkoutVo(getString(R.string.text_kick_back),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);

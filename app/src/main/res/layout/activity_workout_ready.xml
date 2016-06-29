@@ -115,7 +115,8 @@
             android:layout_gravity="left"
             android:layout_marginLeft="25dp"
             android:layout_alignParentLeft="true"
-            android:background="@drawable/selector_exercise_list_btn"/>
+            android:background="@drawable/selector_exercise_list_btn"
+            android:onClick="onClick"/>
 
         <ImageButton
             android:id="@+id/next_btn"

@@ -76,7 +76,9 @@ public class WorkoutPreviewActivity extends BaseAppCompatActivity implements Vie
 
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(mContext, DeviceSettingActivity.class));
+                Intent intent = new Intent(mContext, ScanActivity.class);
+                intent.putExtra("isUpdate", true);
+                startActivity(intent);
             }
         });
         setSupportActionBar(toolbar);

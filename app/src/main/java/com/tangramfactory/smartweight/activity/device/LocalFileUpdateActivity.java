@@ -1,7 +1,11 @@
 package com.tangramfactory.smartweight.activity.device;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.bluetooth.BluetoothDevice;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -32,7 +36,10 @@ import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 
 public class LocalFileUpdateActivity extends BaseAppCompatActivity {
 
-    final static String TAG = SmartWeightApplication.BASE_TAG + "DeviceFirmwareUpdateActivity";
+    final static String TAG = SmartWeightApplication.BASE_TAG + "LocalFileUpdateActivity";
+
+
+    private final static int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0x99;
     public Toolbar toolbar;
     private TextView mTextPercentage;
     private TextView mTextUploading;
@@ -79,6 +86,8 @@ public class LocalFileUpdateActivity extends BaseAppCompatActivity {
         mApplication.send("dfu");
 
         BaseBLEApplication.isDFU = true;
+
+//        checkPermission();
         startInitDFU();
     }
 
@@ -264,4 +273,28 @@ public class LocalFileUpdateActivity extends BaseAppCompatActivity {
     public void onBackPressed() {
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkPermission() {
+        if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED
+                || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Explain to the user why we need to write the permission.
+                Toast.makeText(this, "Read/Write external storage", Toast.LENGTH_SHORT).show();
+            }
+
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+
+            // MY_PERMISSION_REQUEST_STORAGE is an
+            // app-defined int constant
+
+        } else {
+            // 다음 부분은 항상 허용일 경우에 해당이 됩니다.
+//            writeFile();
+        }
+    }
 }

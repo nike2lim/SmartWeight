@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TabHost;
@@ -80,7 +81,7 @@ public class MainActivity extends BaseAppCompatActivity  implements GestureDetec
             imageView.setBackgroundResource(tabDrawableList[i]);
             TabHost.TabSpec tabMenu = tabList.get(i);
             tabMenu.setIndicator(indicator);
-            tabMenu.setContent(new DummyTabContent(mContext));
+            tabMenu.setContent(new TabContent(mContext));
         }
 
         mTabHost.addTab(tabMenu1);
@@ -185,10 +186,10 @@ public class MainActivity extends BaseAppCompatActivity  implements GestureDetec
         super.onResume();
     }
 
-    public class DummyTabContent implements TabHost.TabContentFactory {
+    public class TabContent implements TabHost.TabContentFactory {
         private Context mContext;
 
-        public DummyTabContent(Context context){
+        public TabContent(Context context){
             mContext = context;
         }
 
@@ -301,5 +302,12 @@ public class MainActivity extends BaseAppCompatActivity  implements GestureDetec
     protected void onDeviceConnected() {
         deviceBatteryStateImage.setImageResource(SmartWeightUtility.getBatteryIconState(mApplication.isConnected(), SmartWeightApplication.batteryState));
         super.onDeviceConnected();
+    }
+
+    @Override
+    protected void onBatteryValueReceived(int value) {
+        SmartWeightApplication.batteryState = value;
+        deviceBatteryStateImage.setImageResource(SmartWeightUtility.getBatteryIconState(mApplication.isConnected(), SmartWeightApplication.batteryState));
+        super.onBatteryValueReceived(value);
     }
 }

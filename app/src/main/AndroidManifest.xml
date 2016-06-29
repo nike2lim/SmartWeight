@@ -3,10 +3,11 @@
     package="com.tangramfactory.smartweight"
     android:installLocation="auto"
     android:versionCode="1"
-    android:versionName="1.0.1" >
+    android:versionName="1.0.1">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -19,7 +20,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".SmartWeightApplication"
@@ -86,7 +87,14 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".activity.device.LocalFileUpdateActivity"></activity>
+        <activity android:name=".activity.device.LocalFileUpdateActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.workout.WarningActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.Transparent"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

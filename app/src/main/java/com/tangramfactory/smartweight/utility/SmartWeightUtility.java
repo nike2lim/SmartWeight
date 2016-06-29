@@ -1,6 +1,8 @@
 package com.tangramfactory.smartweight.utility;
 
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +12,7 @@ import com.tangramfactory.smartweight.R;
 import org.joda.time.DateTime;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 public class SmartWeightUtility {
 	static public int getBatteryIconState(boolean isConnected, int batteryValue) {
@@ -237,5 +240,22 @@ public class SmartWeightUtility {
 		byteArray[0] = (byte)(value);
 
 		return byteArray;
+	}
+
+	public static String currentActivityName(Context context) {
+		String activityName = null;
+		try {
+			ActivityManager am = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
+			List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(100);
+			for(ActivityManager.RunningTaskInfo info : taskInfo) {
+				if(null != info.topActivity & info.topActivity.getClassName().contains(context.getPackageName())) {
+					activityName = info.topActivity.getClassName();
+					break;
+				}
+			}
+//			Log.d("topActivity", "CURRENT Activity ::" + activityName);
+		} catch (Exception e) {
+		}
+		return activityName;
 	}
 }

@@ -93,7 +93,8 @@
                 android:background="@drawable/gauge_bg2"
                 android:cropToPadding="false"
                 android:layout_alignParentEnd="false"
-                android:layout_alignParentStart="false" />
+                android:layout_alignParentStart="false"
+                android:visibility="visible"/>
 
             <TextView
                 android:id="@+id/count"
@@ -101,9 +102,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="#1E1E1E"
-                android:textSize="125sp"
-                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="38sp"
+                android:text="TRACKING"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 />
@@ -137,15 +138,23 @@
         </RelativeLayout>
 
         <ImageView
+            android:id="@+id/maskGaugeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/gauge_bg1"
+
+            />
+        <ImageView
             android:id="@+id/maskView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_gravity="center_horizontal"
-            android:rotation="65"
-            android:background="@drawable/mask_loading"
-
+            android:background="@drawable/mask_loading1"
             />
+
         <com.tangramfactory.smartweight.view.CircleClipView
             android:id="@+id/guage_bar"
             android:layout_width="276dp"
@@ -174,12 +183,43 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/gauge_needle"/>
 
+
+        <LinearLayout
+            android:id="@+id/not_correct_workout_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="295dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/icn_wrongworkout"
+                />
+
+
+            <TextView
+                android:id="@+id/text_not_correct_workout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:text="@string/text_not_correct_workout"
+                />
+
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/angle_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="275dp"
             android:orientation="vertical"
+            android:visibility="visible"
             >
 
             <LinearLayout
@@ -256,6 +296,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="275dp"
             angle:bg="@drawable/angle_bar"
+            android:visibility="visible"
             angle:start_degree="0"
             angle:clip_degree="0"
             />
@@ -267,13 +308,24 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="275dp"
             android:rotation="0"
-            android:background="@drawable/angle_needle"/>
+            android:visibility="visible"
+            android:src="@drawable/angle_needle"/>
+
+        <LinearLayout
+            android:id="@+id/dim_layout"
+            android:layout_width="match_parent"
+            android:layout_height="165dp"
+            android:layout_marginTop="275dp"
+            android:background="#99000000"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
-
             android:layout_gravity="bottom">
 
             <ImageButton

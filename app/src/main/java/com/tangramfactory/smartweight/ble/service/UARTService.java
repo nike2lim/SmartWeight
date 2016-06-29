@@ -28,13 +28,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.tangramfactory.smartweight.BaseBLEApplication;
 import com.tangramfactory.smartweight.SmartWeightApplication;
 import com.tangramfactory.smartweight.activity.device.CmdConst;
 import com.tangramfactory.smartweight.utility.DebugLogger;
 import com.tangramfactory.smartweight.utility.SharedPreference;
 import com.tangramfactory.smartweight.utility.SmartWeightUtility;
+import com.tangramfactory.smartweight.vo.WorkoutVo;
 
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -127,6 +130,9 @@ public class UARTService extends BleProfileService implements UARTManagerCallbac
 	public final static String ACTION_RECEIVE_EXERCISE_DATA_CODE= "com.tangram.application.smartweight.uart.EXERCISE_DATA_CODE";
 
 
+	public final static String ACTION_RECEIVE_NOT_WORKOUT = "com.tangram.application.smartweight.uart.ACTION_RECEIVE_NOT_WORKOUT";
+
+
 	private final static int NOTIFICATION_ID = 349; // random
 	private final static int MSG_ID_ECOCHECK = 0x01;
 	// private final static int OPEN_ACTIVITY_REQ = 67; // random
@@ -193,6 +199,8 @@ public class UARTService extends BleProfileService implements UARTManagerCallbac
 		cancelNotification();
 		unregisterReceiver(mDisconnectActionBroadcastReceiver);
 		unregisterReceiver(mIntentBroadcastReceiver);
+		disableEcoSend();
+
 		super.onDestroy();
 	}
 
@@ -302,11 +310,11 @@ public class UARTService extends BleProfileService implements UARTManagerCallbac
 				SharedPreference.getInstance(this).put("DeviceFirmwareVersion", Integer.parseInt(receivedData[1]));
 				if(!(Integer.parseInt(receivedData[1]) > 11))
 					new Handler(getMainLooper()).postDelayed(new Runnable() {
-						@Override
-						public void run() {
-							mManager.send("LBG?");
-						}
-					}, 400);
+					@Override
+					public void run() {
+						mManager.send("LBG?");
+					}
+				}, 400);
 				
 			} else if ("LBG".equals(key)) {
 				receivedDataBroadcast = new Intent(ACTION_RECEIVE_LBG);
@@ -427,6 +435,11 @@ public class UARTService extends BleProfileService implements UARTManagerCallbac
 		DebugLogger.d(TAG, "onDataReceived cmdLen = " + cmdLen);
 
 		switch(cmd) {
+			case CmdConst.CMD_REQUEST_UUID:
+				DebugLogger.d(TAG, "CmdConst.CMD_REQUEST_UUID ack recevied!");
+				isEcoFlag = true;
+				break;
+
 			case CmdConst.CMD_REQUEST_START:
 				DebugLogger.d(TAG, "CmdConst.CMD_REQUEST_START ack recevied!");
 				recvExerciseCode[0] = (byte)value[3];
@@ -513,6 +526,11 @@ public class UARTService extends BleProfileService implements UARTManagerCallbac
 				receivedDataBroadcast = new Intent(ACTION_RECEIVE_BREAK_TIME);
 				receivedDataBroadcast.putExtra(ACTION_RECEIVE_BREAK_TIME_DATA, breakTime);
 				break;
+
+			case CmdConst.CMD_RESPONSE_NOT_WORKOUT:
+				receivedDataBroadcast = new Intent(ACTION_RECEIVE_NOT_WORKOUT);
+				break;
+
 		}
 
 		if(null != receivedDataBroadcast) {
@@ -628,7 +646,82 @@ public class UARTService extends BleProfileService implements UARTManagerCallbac
 
 	@Override
 	public void onDeviceReady() {
+
+		new Handler(getMainLooper()).postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				mManager.send(CmdConst.CMD_REQUEST_UUID, (byte)0, null);
+			}
+		}, 400);
+
+
+		mEcoSendTimerTask = new TimerTask() {
+			@Override
+			public void run() {
+				if(!BaseBLEApplication.isDFU){
+					mEcoCheck.removeMessages(MSG_ID_ECOCHECK);
+					Message msg = Message.obtain();
+					msg.what = MSG_ID_ECOCHECK;
+					mEcoCheck.sendMessageDelayed(msg, 500);
+					isEcoFlag = false;
+					ecoCount = 0;
+					mManager.send(CmdConst.CMD_REQUEST_UUID, (byte)0, null);
+				}
+			}
+		};
+		mEcoSendTimer = new Timer();
+		mEcoSendTimer.schedule(mEcoSendTimerTask, 700, 1000 * 4);
 		super.onDeviceReady();
+	}
+
+
+	Handler mEcoCheck = new Handler(new Handler.Callback() {
+		@Override
+		public boolean handleMessage(Message msg) {
+			switch(msg.what) {
+				case MSG_ID_ECOCHECK:
+					if (!isEcoFlag) {
+						ecoCount++;
+
+						if (ecoCount > 5) {
+							DebugLogger.d(TAG, "handleMessage mManager disconnect!");
+							mManager.disconnect();
+							ecoCount = 0;
+							isEcoFlag = false;
+							mEcoCheck.removeMessages(MSG_ID_ECOCHECK);
+							if(null != mEcoSendTimer) {
+								mEcoSendTimer.cancel();
+								mEcoSendTimer = null;
+							}
+
+							if(null != mEcoSendTimerTask) {
+								mEcoSendTimerTask.cancel();
+								mEcoSendTimerTask = null;
+							}
+							break;
+						}
+					} else {
+						ecoCount = 0;
+					}
+
+					Message sendMsg = Message.obtain();
+					sendMsg.what = MSG_ID_ECOCHECK;
+					mEcoCheck.sendMessageDelayed(sendMsg, 500);
+					break;
+			}
+			return false;
+		}
+	});
+
+
+	private void disableEcoSend() {
+		mEcoCheck.removeMessages(MSG_ID_ECOCHECK);
+
+		if (mEcoSendTimerTask != null)
+			mEcoSendTimerTask.cancel();
+
+		if (mEcoSendTimer != null)
+			mEcoSendTimer.cancel();
 	}
 
 }

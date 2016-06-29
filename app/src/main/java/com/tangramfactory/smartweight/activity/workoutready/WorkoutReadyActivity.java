@@ -15,9 +15,8 @@ import android.widget.TextView;
 import com.tangramfactory.smartweight.R;
 import com.tangramfactory.smartweight.SmartWeightApplication;
 import com.tangramfactory.smartweight.activity.base.BaseAppCompatActivity;
-import com.tangramfactory.smartweight.activity.device.CmdConst;
+import com.tangramfactory.smartweight.activity.device.ScanActivity;
 import com.tangramfactory.smartweight.activity.workout.WorkoutActivity;
-import com.tangramfactory.smartweight.utility.DebugLogger;
 import com.tangramfactory.smartweight.utility.SmartWeightUtility;
 import com.tangramfactory.smartweight.vo.WorkoutVo;
 
@@ -48,18 +47,24 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_ready);
+
+        stepNum = getIntent().getIntExtra("stepNum", 0);
+
         setToolbar();
         loadCodeView();
     }
 
     private void setToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.title_step, 1));
+
+        toolbar.setTitle(getString(R.string.title_step, stepNum));
         toolbar.findViewById(R.id.deviceBatteryState).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(mContext, DeviceSettingActivity.class));
+                Intent intent = new Intent(mContext, ScanActivity.class);
+                intent.putExtra("isUpdate", true);
+                startActivity(intent);
             }
         });
         setSupportActionBar(toolbar);

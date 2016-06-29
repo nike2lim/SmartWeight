@@ -1,13 +1,12 @@
 package com.tangramfactory.smartweight.ble.scanner;
 
-import java.util.Locale;
-
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.text.TextUtils;
 
 import com.tangramfactory.smartweight.utility.ParserUtils;
+
+import java.util.Locale;
 
 @SuppressWarnings("deprecation")
 public class BootloaderScannerJB implements BootloaderScanner, BluetoothAdapter.LeScanCallback {
@@ -55,7 +54,7 @@ public class BootloaderScannerJB implements BootloaderScanner, BluetoothAdapter.
 				
 				switch (currentScanMode) {
 				case BootloaderScanner.SCAN_MODE_RSSI:
-					if (deviceName != null && rssi > NO_RSSI && (deviceName.indexOf("SmartRope") > -1)) {
+					if (deviceName != null && (deviceName.indexOf("TG") > -1)) {
 						onResult(device, deviceName, rssi);
 					}
 					break;

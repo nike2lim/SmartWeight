@@ -18,6 +18,7 @@ public class CmdConst {
     public final static byte CMD_RESPONSE_ANGLE_DATA        = 9;
 
     public final static byte CMD_RESPONSE_BREAKTIME_DATA    = 11;
+    public final static byte CMD_RESPONSE_NOT_WORKOUT       = 13;
 
 
     public final static byte CMD_DEVIDE_VERSION             = 0x02;

@@ -11,10 +11,15 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tangramfactory.smartweight.R;
@@ -22,6 +27,7 @@ import com.tangramfactory.smartweight.SmartWeightApplication;
 import com.tangramfactory.smartweight.activity.base.BaseAppCompatActivity;
 import com.tangramfactory.smartweight.activity.breaktime.BreakTimeActivity;
 import com.tangramfactory.smartweight.activity.device.CmdConst;
+import com.tangramfactory.smartweight.activity.device.ScanActivity;
 import com.tangramfactory.smartweight.activity.workoutresult.WorkoutResultActivity;
 import com.tangramfactory.smartweight.ble.service.UARTService;
 import com.tangramfactory.smartweight.utility.DebugLogger;
@@ -36,9 +42,10 @@ import org.joda.time.DateTimeZone;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class WorkoutActivity extends BaseAppCompatActivity {
+    protected static final String TAG = SmartWeightApplication.BASE_TAG + "WorkoutActivity";
+
     public Toolbar toolbar;
     ImageButton deviceBatteryStateImage;
 
@@ -47,8 +54,11 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 
     ImageView mAngleNiddle;
     ImageView mGuageNiddle;
-    ImageView maskImageView;
 
+    ImageView maskLoadingImageView;
+    ImageView maskLoadingGaugeImageView;
+
+    ImageView mGaugeBg;
     CircleClipView mGuageBar;
     CircleClipView mAngleBar;
     ImageView setImageView;
@@ -58,8 +68,14 @@ public class WorkoutActivity extends BaseAppCompatActivity {
     TextView weightTextView;
     TextView countTextView;
 
+    LinearLayout mAngleLayout;
     TextView angleLeftRightTextView;
     TextView angleTextView;
+
+    LinearLayout dimLayout;
+
+    LinearLayout mNotCorrectWorkoutLayout;
+    TextView mNotCorrectWorkoutTextView;
 
     private int stepNum = 0;
     private int setNum = 0;
@@ -98,13 +114,20 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(mContext, DeviceSettingActivity.class));
+                Intent intent = new Intent(mContext, ScanActivity.class);
+                intent.putExtra("isUpdate", true);
+                startActivity(intent);
             }
         });
         setSupportActionBar(toolbar);
     }
 
     private Timer timer;
+
+    Animation startAnimation;
+
+    Animation fadeInAnimation;
+    Animation fadeOutAnimation;
 
     protected void loadCodeView() {
         startWorkoutCmd();
@@ -116,8 +139,14 @@ public class WorkoutActivity extends BaseAppCompatActivity {
         repsTextView = (TextView)findViewById(R.id.reps_count);
         weightTextView = (TextView)findViewById(R.id.weight);
         countTextView = (TextView)findViewById(R.id.count);
+
+        mAngleLayout = (LinearLayout)findViewById(R.id.angle_layout);
         angleLeftRightTextView = (TextView)findViewById(R.id.angle_left_right);
         angleTextView = (TextView)findViewById(R.id.angle_text);
+
+//        countTextView.setTextColor(Color.parseColor("#1E1E1E"));
+        startAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.blink_animation);
+//        countTextView.startAnimation(startAnimation);
 
         WorkoutVo data = mWorkoutList.get(exerciseNum);
         setNum = data.getCurrentSetNum();
@@ -130,11 +159,16 @@ public class WorkoutActivity extends BaseAppCompatActivity {
         repsTextView.setText(String.valueOf(data.getReps()));
         weightTextView.setText(data.getWeight() + data.getWeightUnit());
 
-        maskImageView = (ImageView)findViewById(R.id.maskView);
-        maskImageView.setVisibility(View.VISIBLE);
+        maskLoadingImageView = (ImageView)findViewById(R.id.maskView);
+        maskLoadingImageView.setVisibility(View.GONE);
+
+        maskLoadingGaugeImageView = (ImageView)findViewById(R.id.maskGaugeView);
+        maskLoadingImageView.setVisibility(View.GONE);
+
         mAngleNiddle = (ImageView)findViewById(R.id.angle_niddle);
         mGuageNiddle = (ImageView)findViewById(R.id. guage_niddle);
 
+        mGaugeBg = (ImageView)findViewById(R.id.gauge_bg);
         mGuageBar = (CircleClipView)findViewById(R.id.guage_bar);
         mAngleBar = (CircleClipView)findViewById(R.id.angle_bar);
 
@@ -146,63 +180,77 @@ public class WorkoutActivity extends BaseAppCompatActivity {
             mAngleBar.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
 
+        mNotCorrectWorkoutLayout = (LinearLayout)findViewById(R.id.not_correct_workout_layout);
+        mNotCorrectWorkoutTextView = (TextView) findViewById(R.id.text_not_correct_workout);
+
+        dimLayout = (LinearLayout)findViewById(R.id.dim_layout);
+
         startTime = DateTime.now(DateTimeZone.UTC);
 
         angleTextView.setText(getString(R.string.text_angle, 0));
 
-//        mGuageBar.setClippingAngle(135);
-//        mGuageNiddle.setRotation(60);
+        fadeInAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+        fadeOutAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_out);
 
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        float rotation = maskImageView.getRotation()+ 20;
-                        if(rotation > 315) {
-                            rotation = 65;
-                        }
-                        maskImageView.setRotation(rotation);
+        fadeInAnimation.setAnimationListener(mFadeInAnimationListener);
+        fadeOutAnimation.setAnimationListener(mFadeOutAnimationListener);
 
-//                        if(mGuageBar.getClippingAngle() >= (135 + 270)) {
-//                            mGuageBar.setClippingAngle(135);
-//                            mGuageBar.setStartAngle(135);
-//                            mGuageNiddle.setRotation(45);
-//                            maskImageView.setRotation(45);
-//                            testZ = 0;
-//                        }
-//
-//                        DebugLogger.d(TAG, "test testZ = " +  testZ);
-//                        DebugLogger.d(TAG, "test mGuageBar.getClippingAngle() = " +  mGuageBar.getClippingAngle());
-//                        DebugLogger.d(TAG, "test mGuageNiddle.getRotation() = " +  mGuageNiddle.getRotation());
-//
-//                        float t = (float)(testZ * 1.35);
-//
-//                        mGuageNiddle.setRotation(mGuageNiddle.getRotation() + t);
-//                        mGuageBar.setClippingAngle(mGuageBar.getClippingAngle() + t);
-//                        maskImageView.setRotation(maskImageView.getRotation() + t);
-//
-//                        testZ++;
-
-//                        if(mAngleBar.getClippingAngle() >= 180) {
-//                            mAngleBar.setClippingAngle(0);
-//                            mAngleNiddle.setRotation(0);
-//                        }
-//
-//                        mAngleBar.setClippingAngle(mAngleBar.getClippingAngle() + 1);
-//                        mAngleNiddle.setRotation(mAngleNiddle.getRotation()+1);
-                    }
-                });
-            }
-        }, 300, 100);
-
-        setSoundPool();
+//        setSoundPool();
         registerReceiver(mExerciseBroadcastReceiver, makeExerciseDataIntentFilter());
         registerReceiver(mAngleBroadcastReceiver, makeAngletDataIntentFilter());
         registerReceiver(mCountBroadcastReceiver, makeCountDataIntentFilter());
+        registerReceiver(mNotWorkoutBroadcastReceiver, makeNotWorkoutIntentFilter());
     }
+
+    int maskState = 0;
+    Animation.AnimationListener mFadeInAnimationListener = new Animation.AnimationListener() {
+
+        @Override
+        public void onAnimationStart(Animation animation) {
+            DebugLogger.d(TAG, "mFadeInAnimationListener onAnimationStart");
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+            maskLoadingImageView.setAnimation(fadeOutAnimation);
+            fadeOutAnimation.setAnimationListener(mFadeOutAnimationListener);
+            fadeOutAnimation.start();
+            DebugLogger.d(TAG, "mFadeInAnimationListener onAnimationEnd");
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+            DebugLogger.d(TAG, "mFadeInAnimationListener onAnimationRepeat");
+        }
+    };
+
+    Animation.AnimationListener mFadeOutAnimationListener = new Animation.AnimationListener() {
+
+
+        @Override
+        public void onAnimationStart(Animation animation) {
+            DebugLogger.d(TAG, "mFadeOutAnimationListener onAnimationStart");
+        }
+
+        @Override
+        public void onAnimationEnd(Animation animation) {
+            maskState++;
+            if(maskState > 2) {
+                maskState = 1;
+            }
+            int resId = getResources().getIdentifier("mask_loading" + maskState, "drawable", mContext. getPackageName());
+            maskLoadingImageView.setBackgroundResource(resId);
+            maskLoadingImageView.setAnimation(fadeInAnimation);
+            fadeInAnimation.setAnimationListener(mFadeInAnimationListener);
+            fadeInAnimation.start();
+            DebugLogger.d(TAG, "mFadeOutAnimationListener onAnimationEnd");
+        }
+
+        @Override
+        public void onAnimationRepeat(Animation animation) {
+            DebugLogger.d(TAG, "mFadeOutAnimationListener onAnimationRepeat");
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -255,18 +303,9 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 
     private void saveWorkoutData() {
         WorkoutVo data = mWorkoutList.get(exerciseNum);
-
-//        switch(exerciseNum) {
-//            case 0: count = 5; accuracy = "80";     break;
-//            case 1: count = 6; accuracy = "90";     break;
-//            case 2: count = 7; accuracy = "100";    break;
-//            case 3: count = 2; accuracy = "80";     break;
-//            case 4: count = 3; accuracy = "100";    break;
-//        }
-
-        int progress =(int) (((float)mCount / (float)data.getReps()) * 100);
-
         GuideResultVo resultVo = null;
+//        int progress =(int) (((float)mCount / ((float)data.getReps() * data.getTotalSetNum())) * 100);
+        int progress = 0;
 
         boolean isExistData = false;
         for(GuideResultVo vo : mApplication.mGuideResultVo) {
@@ -279,6 +318,15 @@ public class WorkoutActivity extends BaseAppCompatActivity {
         if(false == isExistData) {
             resultVo = new GuideResultVo(progress, data.getExerciseName(), startTime);
         }
+
+        ArrayList<GuideResultVo.SetInfo> setInfoList = resultVo.getSetInfoList();
+        int totalCount = 0;
+        for(GuideResultVo.SetInfo info : setInfoList) {
+            totalCount = totalCount + Integer.valueOf(info.getResultReps());
+        }
+        totalCount = totalCount + mCount;
+        progress =(int) (((float)totalCount / ((float)data.getReps() * data.getTotalSetNum())) * 100);
+        resultVo.setProgress(progress);
 
         int accuracy = 0;
 
@@ -368,10 +416,10 @@ public class WorkoutActivity extends BaseAppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(null != timer) {
-            timer.cancel();
-            timer = null;
-        }
+//        if(null != timer) {
+//            timer.cancel();
+//            timer = null;
+//        }
 
         if(null != mExerciseBroadcastReceiver) {
             unregisterReceiver(mExerciseBroadcastReceiver);
@@ -382,6 +430,10 @@ public class WorkoutActivity extends BaseAppCompatActivity {
         }
         if(null != mCountBroadcastReceiver) {
             unregisterReceiver(mCountBroadcastReceiver);
+        }
+
+        if(null != mNotWorkoutBroadcastReceiver) {
+            unregisterReceiver(mNotWorkoutBroadcastReceiver);
         }
 
         if(null != soundPool) {
@@ -409,7 +461,14 @@ public class WorkoutActivity extends BaseAppCompatActivity {
         return intentFilter;
     }
 
+    private IntentFilter makeNotWorkoutIntentFilter() {
+        final IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(UARTService.ACTION_RECEIVE_NOT_WORKOUT);
+        return intentFilter;
+    }
 
+
+    boolean isWrongWorkOut = false;
     protected BroadcastReceiver mExerciseBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
@@ -419,12 +478,47 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                     String exerciseName = intent.getStringExtra(UARTService.ACTION_RECEIVE_EXERCISE_DATA_CODE);
                     WorkoutVo data = mWorkoutList.get(exerciseNum);
 
+                    isNotWorkout = false;
+                    dimLayout.setVisibility(View.GONE);
+
                     DebugLogger.d(TAG, "mExerciseBroadcastReceiver receive exerciseName = " + exerciseName);
 
-                    if(false == data.getExerciseName().equals(exerciseName)) {
-                        countTextView.setTextColor(ContextCompat.getColor(mContext,  R.color.red_80));
-                    }else {
-                        countTextView.setTextColor(ContextCompat.getColor(mContext,  R.color.white));
+//                    if(false == data.getExerciseName().equals(exerciseName)) {
+                    if(exerciseName.equals(getString(R.string.text_shoulder_press))) {
+                        isWrongWorkOut = true;
+
+                        initAngleUI();
+                        stopNotWorkAnimation();
+                        showNotCorrectWorkout();
+
+//                        countTextView.setTextColor(ContextCompat.getColor(mContext,  R.color.red_80));
+
+//                        if(false == SmartWeightUtility.currentActivityName(mContext).equals(WarningActivity.WARNING_ACTIVITY_PACKAGENAE)) {
+//
+//                            initAngleUI();
+//
+//                            Intent startIntent = new Intent(mContext, WarningActivity.class);
+//                            startIntent.putExtra("exerciseName", exerciseName);
+//                            startIntent.putExtra(WarningActivity.WARNING_TYPE, WarningActivity.WARNING_TYPE_WRONG_EXERCISE);
+//                            startActivityForResult(startIntent, 0x99);
+//                        }
+                    }
+                    else if(mCount == 0) {
+//                        countTextView.setTextColor(Color.parseColor("#1E1E1E"));
+                    }
+                    else if(exerciseName.equals(getString(R.string.text_lateral_raises))) {
+                        DebugLogger.d(TAG, "TextColor ³ë¶õ»ö");
+                        isWrongWorkOut = false;
+                        showAngleLayout();
+                        countTextView.setTextColor(Color.parseColor("#FFFF00"));
+                    }
+                    else {
+                        isWrongWorkOut = false;
+                        showAngleLayout();
+                        if(false == isTextColorLock) {
+                            DebugLogger.d(TAG, "TextColor Èò»ö");
+                            countTextView.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                        }
                     }
                 }
             });
@@ -432,20 +526,62 @@ public class WorkoutActivity extends BaseAppCompatActivity {
     };
 
     boolean isCountRecevied = false;
+    int prevZ = 0;
+    boolean isRising = false;
+    boolean isLower = false;
+    int savedCount = 0;
+
+    boolean isTextColorLock = false;
+
     protected BroadcastReceiver mAngleBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(false == isCountRecevied)            return;
+//                    if(false == isCountRecevied)            return;
+                    if(true == isNotWorkout)                return;
+                    if(true == isWrongWorkOut)              return;
 
                     int x = intent.getIntExtra(UARTService.ACTION_RECEIVE_WEIGHT_DATA_XVALUE, 0);
                     int y = intent.getIntExtra(UARTService.ACTION_RECEIVE_WEIGHT_DATA_YVALUE, 0);
                     int z = intent.getIntExtra(UARTService.ACTION_RECEIVE_WEIGHT_DATA_ZVALUE, 0);
                     int angle = intent.getIntExtra(UARTService.ACTION_RECEIVE_WEIGHT_DATA_ANGLE, 0);
 
+                    if(prevZ < z) {
+                        isRising = true;
+                        isLower = false;
+                    }else if(prevZ > z){
+                        isRising = false;
+                        isLower = true;
+                    }else {
+                        isRising = false;
+                        isLower = false;
+                    }
+
+                    DebugLogger.d(TAG, "TextColor prevZ = " + prevZ + ", Z = " + z );
+                    DebugLogger.d(TAG, "TextColor savedCount = " + savedCount + ", mCount = " + mCount );
+//                    if((savedCount == mCount &&  (isRising || isLower)) || (savedCount != mCount && isLower)) {
+//                        DebugLogger.d(TAG, "TextColor isTextColorLock true!!!!!!!!!!!");
+//                        isTextColorLock = true;
+//                    }else {
+//                        DebugLogger.d(TAG, "TextColor isTextColorLock false!!!!!!!!!!!");
+//                        isTextColorLock = false;
+//                        DebugLogger.d(TAG, "TextColor Èò»ö");
+//                        countTextView.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+//                    }
+
+                    prevZ = z;
+
                     WorkoutVo data = mWorkoutList.get(exerciseNum);
+
+                    if(true == SmartWeightUtility.currentActivityName(mContext).equals(WarningActivity.WARNING_ACTIVITY_PACKAGENAE)) {
+                        mGuageNiddle.setRotation(45);
+                        mGuageBar.setClippingAngle(135);
+                        mAngleBar.setStartAngle(0);
+                        mAngleBar.setClippingAngle(0);
+                        return;
+                    }
 
                     int gague = 0;
                     if(data.getExerciseName().equals(getString(R.string.text_curl)) || data.getExerciseName().equals(getString(R.string.text_lunge))
@@ -511,7 +647,6 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                     mAngleNiddle.setRotation(angle);
 
                     DebugLogger.d(TAG, "mMotionBroadcastReceiver x = " + x + ", y = " +y + ",z = "+z);
-                    DebugLogger.d(TAG, "mMotionBroadcastReceiver x = " + x + ", y = " +y + ",z = "+z);
             }
             });
         }
@@ -524,12 +659,25 @@ public class WorkoutActivity extends BaseAppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    isCountRecevied = true;
-                    if(null != timer) {
-                        timer.cancel();
-                        timer = null;
-                        maskImageView.setVisibility(View.GONE);
+//                    isCountRecevied = true;
+                    isNotWorkout = true;
+//                    if(null != timer) {
+//                        timer.cancel();
+//                        timer = null;
+//                        maskImageView.setVisibility(View.GONE);
+//                    }
+
+//                    if(true == SmartWeightUtility.currentActivityName(mContext).equals(WarningActivity.WARNING_ACTIVITY_PACKAGENAE)) {
+//                        return;
+//                    }
+
+                    stopNotWorkAnimation();
+
+                    if(mGaugeBg.getVisibility() != View.VISIBLE) {
+                        mGaugeBg.setVisibility(View.VISIBLE);
                     }
+
+                    countTextView.clearAnimation();
 
                     int count = intent.getIntExtra(UARTService.ACTION_RECEIVE_COUNT_DATA_COUNT, 0);
                     int accuracy = intent.getIntExtra(UARTService.ACTION_RECEIVE_COUNT_DATA_ACCURACY, 0);
@@ -538,16 +686,20 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                     DebugLogger.d(TAG, "mMotionBroadcastReceiver accuracy = " + accuracy);
 
                     WorkoutVo data = mWorkoutList.get(exerciseNum);
+
+                    countTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 120);
+                    countTextView.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                    savedCount = mCount;
                     mCount = count;
 
-                    if(count > data.getReps()) {
-                        return;
-                    }
+//                    if(count > data.getReps()) {
+//                        return;
+//                    }
 
                     int tmp = count%10;
 
-                    int resId = getResources().getIdentifier("count_" + tmp, "raw", mContext. getPackageName());
-                    soundID = soundPool.load(mContext, resId, 1);
+//                    int resId = getResources().getIdentifier("count_" + tmp, "raw", mContext. getPackageName());
+//                    soundID = soundPool.load(mContext, resId, 1);
 
                     tmp = 0;
                     if(count -1 <= 0) {
@@ -560,19 +712,121 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                         tmp = data.getReps() -1;
                     }
 
-                    mAccuracy[tmp-1] = accuracy;
-                    countTextView.setTextColor(Color.WHITE);
+//                    mAccuracy[tmp-1] = accuracy;
+
+//                    countTextView.setTextColor(Color.WHITE);
+
                     countTextView.setText(String.valueOf(count));
 
-                    if(mCount >= data.getReps()) {
-                        unregisterReceiver(mCountBroadcastReceiver);
-                        mCountBroadcastReceiver = null;
-                        nextStep();
-                    }
+//                    if(mCount >= data.getReps()) {
+//                        unregisterReceiver(mCountBroadcastReceiver);
+//                        mCountBroadcastReceiver = null;
+//                        nextStep();
+//                    }
                 }
             });
         }
     };
+
+    boolean isNotWorkout = false;
+    protected BroadcastReceiver mNotWorkoutBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+//                    mGaugeBg.setVisibility(View.GONE);
+
+                    initAngleUI();
+                    isNotWorkout = true;
+                    maskState = 0;
+
+                    if(mCount == 0) {
+                        countTextView.startAnimation(startAnimation);
+                    }
+
+                    dimLayout.setVisibility(View.VISIBLE);
+                    maskLoadingImageView.setVisibility(View.VISIBLE);
+                    maskLoadingGaugeImageView.setVisibility(View.VISIBLE);
+
+                    maskLoadingImageView.startAnimation(fadeInAnimation);
+                    fadeInAnimation.setAnimationListener(mFadeInAnimationListener);
+                    fadeOutAnimation.setAnimationListener(mFadeOutAnimationListener);
+
+                    showAngleLayout();
+
+//                    if(false ==  SmartWeightUtility.currentActivityName(mContext).equals(WarningActivity.WARNING_ACTIVITY_PACKAGENAE)) {
+//                        initAngleUI();
+//
+//                        Intent startIntent = new Intent(mContext, WarningActivity.class);
+//                        startIntent.putExtra(WarningActivity.WARNING_TYPE, WarningActivity.WARNING_TYPE_NOT_WORKING);
+//                        startActivityForResult(startIntent, 0x99);
+//                    }
+                }
+            });
+        }
+    };
+
+    private void initAngleUI() {
+        mGuageNiddle.setRotation(45);
+        mGuageBar.setClippingAngle(135);
+        mAngleBar.setStartAngle(0);
+        mAngleBar.setClippingAngle(0);
+        mAngleNiddle.setRotation(0);
+        angleTextView.setText(getString(R.string.text_angle, 0));
+    }
+
+    private void stopNotWorkAnimation() {
+        fadeInAnimation.cancel();
+        fadeOutAnimation.cancel();
+        fadeInAnimation.setAnimationListener(null);
+        fadeOutAnimation.setAnimationListener(null);
+
+        maskLoadingImageView.clearAnimation();
+        maskLoadingImageView.setVisibility(View.GONE);
+
+        maskLoadingGaugeImageView.clearAnimation();
+        maskLoadingGaugeImageView.setVisibility(View.GONE);
+    }
+
+    private void showNotCorrectWorkout() {
+        mNotCorrectWorkoutLayout.setVisibility(View.VISIBLE);
+        mNotCorrectWorkoutTextView.setText(Html.fromHtml(getString(R.string.text_not_correct_workout)));
+
+        removeAngleLayout();
+    }
+
+    private void showAngleLayout() {
+        mAngleLayout.setVisibility(View.VISIBLE);
+        mAngleNiddle.setVisibility(View.VISIBLE);
+        mAngleBar.setVisibility(View.VISIBLE);
+        removeNotCorrectLayout();
+    }
+
+    private void removeAngleLayout() {
+        mAngleLayout.setVisibility(View.GONE);
+        mAngleNiddle.setVisibility(View.GONE);
+        mAngleBar.setVisibility(View.GONE);
+    }
+
+    private void removeNotCorrectLayout() {
+        mNotCorrectWorkoutLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if(0x99 == requestCode) {
+//            int count = data.getIntExtra("count", 0);
+//            int accuracy = data.getIntExtra("accuracy", 0);
+//
+//            if(count > 0 && count > mCount) {
+//                mCount = count;
+//                countTextView.setTextColor(Color.WHITE);
+//                countTextView.setText(String.valueOf(count));
+//            }
+//        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     public  void startWorkoutCmd() {
         WorkoutVo data = mWorkoutList.get(exerciseNum);

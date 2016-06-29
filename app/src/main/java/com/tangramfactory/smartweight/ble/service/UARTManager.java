@@ -28,6 +28,7 @@ import android.bluetooth.BluetoothGattService;
 import android.content.Context;
 
 import com.tangramfactory.smartweight.SmartWeightApplication;
+import com.tangramfactory.smartweight.activity.device.CmdConst;
 import com.tangramfactory.smartweight.utility.DebugLogger;
 
 import java.util.LinkedList;
@@ -124,5 +125,30 @@ public class UARTManager extends BleManager<UARTManagerCallbacks> {
 			mTXCharacteristic.setValue(request);
 			writeCharacteristic(mTXCharacteristic);
 		}
+	}
+
+	public void send(byte cmd, byte cmdLen, byte[] payload) {
+		byte[] commandByte = new byte[3 + cmdLen + 1];
+
+		byte req = (byte)(0<<7);
+		byte reqCmd = (byte) ((byte)cmd & CmdConst.MASK_COMMAND);
+		req = (byte)(req|reqCmd);
+		commandByte[0] = req;
+
+		DebugLogger.d(TAG, "send comd = " + Integer.toBinaryString(commandByte[0]));
+
+		commandByte[2] = (byte)(commandByte[2]|cmdLen);
+		if(null != payload && cmdLen > 0 ) {
+			System.arraycopy(payload,0, commandByte, 3, cmdLen);
+		}
+
+		byte cheksum = 0;
+		for(int i=0; i< commandByte.length; i++) {
+			cheksum = (byte) (cheksum + commandByte[i]);
+		}
+
+		commandByte[commandByte.length-1] = cheksum;
+
+		send(commandByte);
 	}
 }
