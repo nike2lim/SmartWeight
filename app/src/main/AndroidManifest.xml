@@ -87,14 +87,18 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".activity.device.LocalFileUpdateActivity"
+        <activity
+            android:name=".activity.device.LocalFileUpdateActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.workout.WarningActivity"
+        <activity
+            android:name=".activity.workout.WarningActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.Transparent"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Transparent" />
+        <activity android:name=".activity.workout.WorkoutAnaliticActivity"></activity>
     </application>
 
 </manifest>

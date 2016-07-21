@@ -9,6 +9,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -49,7 +50,6 @@ public class WorkoutActivity extends BaseAppCompatActivity {
     public Toolbar toolbar;
     ImageButton deviceBatteryStateImage;
 
-
     FrameLayout mRootContentLayout;
 
     ImageView mAngleNiddle;
@@ -85,8 +85,15 @@ public class WorkoutActivity extends BaseAppCompatActivity {
     DateTime startTime;
     DateTime endTime;
 
+    private Timer timer;
+
+    Animation startAnimation;
+
+    Animation fadeInAnimation;
+    Animation fadeOutAnimation;
     int mCount;
-    int[] mAccuracy;
+//    int[] mAccuracy;
+    int mAccuracy;
 
     private SoundPool soundPool;
     private int soundID;
@@ -110,24 +117,17 @@ public class WorkoutActivity extends BaseAppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         toolbar.setTitle(data.getExerciseName());
-        toolbar.findViewById(R.id.deviceBatteryState).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, ScanActivity.class);
-                intent.putExtra("isUpdate", true);
-                startActivity(intent);
-            }
-        });
+//        toolbar.findViewById(R.id.deviceBatteryState).setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(mContext, ScanActivity.class);
+//                intent.putExtra("isUpdate", true);
+//                startActivity(intent);
+//            }
+//        });
         setSupportActionBar(toolbar);
     }
-
-    private Timer timer;
-
-    Animation startAnimation;
-
-    Animation fadeInAnimation;
-    Animation fadeOutAnimation;
 
     protected void loadCodeView() {
         startWorkoutCmd();
@@ -150,8 +150,8 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 
         WorkoutVo data = mWorkoutList.get(exerciseNum);
         setNum = data.getCurrentSetNum();
-        mAccuracy = new int[data.getReps()];
-        Arrays.fill(mAccuracy, 0);
+//        mAccuracy = new int[data.getReps()];
+//        Arrays.fill(mAccuracy, 0);
 
         setImageView.setBackgroundResource(getResources().getIdentifier("workout_set_0" + (setNum + 1), "drawable", getPackageName()));
 
@@ -163,7 +163,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
         maskLoadingImageView.setVisibility(View.GONE);
 
         maskLoadingGaugeImageView = (ImageView)findViewById(R.id.maskGaugeView);
-        maskLoadingImageView.setVisibility(View.GONE);
+
 
         mAngleNiddle = (ImageView)findViewById(R.id.angle_niddle);
         mGuageNiddle = (ImageView)findViewById(R.id. guage_niddle);
@@ -195,7 +195,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
         fadeInAnimation.setAnimationListener(mFadeInAnimationListener);
         fadeOutAnimation.setAnimationListener(mFadeOutAnimationListener);
 
-//        setSoundPool();
+        setSoundPool();
         registerReceiver(mExerciseBroadcastReceiver, makeExerciseDataIntentFilter());
         registerReceiver(mAngleBroadcastReceiver, makeAngletDataIntentFilter());
         registerReceiver(mCountBroadcastReceiver, makeCountDataIntentFilter());
@@ -207,7 +207,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 
         @Override
         public void onAnimationStart(Animation animation) {
-            DebugLogger.d(TAG, "mFadeInAnimationListener onAnimationStart");
+//            DebugLogger.d(TAG, "mFadeInAnimationListener onAnimationStart");
         }
 
         @Override
@@ -215,12 +215,12 @@ public class WorkoutActivity extends BaseAppCompatActivity {
             maskLoadingImageView.setAnimation(fadeOutAnimation);
             fadeOutAnimation.setAnimationListener(mFadeOutAnimationListener);
             fadeOutAnimation.start();
-            DebugLogger.d(TAG, "mFadeInAnimationListener onAnimationEnd");
+//            DebugLogger.d(TAG, "mFadeInAnimationListener onAnimationEnd");
         }
 
         @Override
         public void onAnimationRepeat(Animation animation) {
-            DebugLogger.d(TAG, "mFadeInAnimationListener onAnimationRepeat");
+//            DebugLogger.d(TAG, "mFadeInAnimationListener onAnimationRepeat");
         }
     };
 
@@ -229,7 +229,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 
         @Override
         public void onAnimationStart(Animation animation) {
-            DebugLogger.d(TAG, "mFadeOutAnimationListener onAnimationStart");
+//            DebugLogger.d(TAG, "mFadeOutAnimationListener onAnimationStart");
         }
 
         @Override
@@ -243,12 +243,12 @@ public class WorkoutActivity extends BaseAppCompatActivity {
             maskLoadingImageView.setAnimation(fadeInAnimation);
             fadeInAnimation.setAnimationListener(mFadeInAnimationListener);
             fadeInAnimation.start();
-            DebugLogger.d(TAG, "mFadeOutAnimationListener onAnimationEnd");
+//            DebugLogger.d(TAG, "mFadeOutAnimationListener onAnimationEnd");
         }
 
         @Override
         public void onAnimationRepeat(Animation animation) {
-            DebugLogger.d(TAG, "mFadeOutAnimationListener onAnimationRepeat");
+//            DebugLogger.d(TAG, "mFadeOutAnimationListener onAnimationRepeat");
         }
     };
 
@@ -295,6 +295,9 @@ public class WorkoutActivity extends BaseAppCompatActivity {
             }
         });
 
+        if(soundID != 0) {
+            soundPool.stop(soundID);
+        }
         int resId = getResources().getIdentifier("go", "raw", mContext. getPackageName());
         soundID = soundPool.load(mContext, resId, 1);
 
@@ -306,6 +309,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
         GuideResultVo resultVo = null;
 //        int progress =(int) (((float)mCount / ((float)data.getReps() * data.getTotalSetNum())) * 100);
         int progress = 0;
+        long totalRestTime = 0;
 
         boolean isExistData = false;
         for(GuideResultVo vo : mApplication.mGuideResultVo) {
@@ -323,6 +327,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
         int totalCount = 0;
         for(GuideResultVo.SetInfo info : setInfoList) {
             totalCount = totalCount + Integer.valueOf(info.getResultReps());
+            totalRestTime = totalRestTime + info.getSetRestTime();
         }
         totalCount = totalCount + mCount;
         progress =(int) (((float)totalCount / ((float)data.getReps() * data.getTotalSetNum())) * 100);
@@ -330,19 +335,21 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 
         int accuracy = 0;
 
-        for(int i=0; i < mAccuracy.length; i++) {
-            accuracy = accuracy + mAccuracy[i];
-        }
-        accuracy = (accuracy / mAccuracy.length);
+//        for(int i=0; i < mAccuracy.length; i++) {
+//            accuracy = accuracy + mAccuracy[i];
+//        }
+//        accuracy = (accuracy / mAccuracy.length);
+
+        accuracy = mAccuracy;
 
         resultVo.addSetInfo(String.valueOf(data.getCurrentSetNum()+1), data.getWeight(), data.getWeightUnit(), String.valueOf(data.getReps()),  String.valueOf(mCount), String.valueOf(accuracy));
 
-        DebugLogger.d(TAG, "saveWorkoutData exerciseName = " + data.getExerciseName() + ", progress = " + progress);
-        DebugLogger.d(TAG, "saveWorkoutData set = " + data.getCurrentSetNum()+1 + ", data.getWeight() = " + data.getWeight());
-        DebugLogger.d(TAG, "saveWorkoutData mCount = " + mCount + ", accuracy = " + accuracy);
+//        DebugLogger.d(TAG, "saveWorkoutData exerciseName = " + data.getExerciseName() + ", progress = " + progress);
+//        DebugLogger.d(TAG, "saveWorkoutData set = " + data.getCurrentSetNum()+1 + ", data.getWeight() = " + data.getWeight());
+//        DebugLogger.d(TAG, "saveWorkoutData mCount = " + mCount + ", accuracy = " + accuracy);
 
         if(exerciseNum == (mWorkoutList.size() - 1)) {
-            int[] restTimeVal = SmartWeightUtility.getTimeHMS(endTime.getMillis() - startTime.getMillis());
+            int[] restTimeVal = SmartWeightUtility.getTimeHMS(totalRestTime);
             String restTime = "-";
             if(restTimeVal[1] > 0) {
                 restTime = String.valueOf(restTimeVal[1]) + "min";
@@ -399,6 +406,11 @@ public class WorkoutActivity extends BaseAppCompatActivity {
         saveWorkoutData();
 
         WorkoutVo data = mWorkoutList.get(exerciseNum);
+
+//        DebugLogger.d(TAG, "nextStep data.getCurrentSetNum() = " + data.getCurrentSetNum());
+//        DebugLogger.d(TAG, "nextStep data.getTotalSetNum()  = " + data.getTotalSetNum() );
+//        DebugLogger.d(TAG, "nextStep exerciseNum  = " + exerciseNum);
+//        DebugLogger.d(TAG, "nextStep mWorkoutList.size()  = " + mWorkoutList.size());
 
         if(data.getCurrentSetNum() == (data.getTotalSetNum() -1) && exerciseNum == (mWorkoutList.size()-1)) {
             startActivity(new Intent(this, WorkoutResultActivity.class));
@@ -481,6 +493,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                     isNotWorkout = false;
                     dimLayout.setVisibility(View.GONE);
 
+                    DebugLogger.d(TAG, "WorkoutData receive exerciseName = " + exerciseName);
                     DebugLogger.d(TAG, "mExerciseBroadcastReceiver receive exerciseName = " + exerciseName);
 
 //                    if(false == data.getExerciseName().equals(exerciseName)) {
@@ -490,6 +503,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                         initAngleUI();
                         stopNotWorkAnimation();
                         showNotCorrectWorkout();
+                        countTextView.clearAnimation();
 
 //                        countTextView.setTextColor(ContextCompat.getColor(mContext,  R.color.red_80));
 
@@ -507,7 +521,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 //                        countTextView.setTextColor(Color.parseColor("#1E1E1E"));
                     }
                     else if(exerciseName.equals(getString(R.string.text_lateral_raises))) {
-                        DebugLogger.d(TAG, "TextColor ³ë¶õ»ö");
+//                        DebugLogger.d(TAG, "TextColor ³ë¶õ»ö");
                         isWrongWorkOut = false;
                         showAngleLayout();
                         countTextView.setTextColor(Color.parseColor("#FFFF00"));
@@ -516,7 +530,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                         isWrongWorkOut = false;
                         showAngleLayout();
                         if(false == isTextColorLock) {
-                            DebugLogger.d(TAG, "TextColor Èò»ö");
+//                            DebugLogger.d(TAG, "TextColor Èò»ö");
                             countTextView.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                         }
                     }
@@ -539,14 +553,21 @@ public class WorkoutActivity extends BaseAppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-//                    if(false == isCountRecevied)            return;
-                    if(true == isNotWorkout)                return;
-                    if(true == isWrongWorkOut)              return;
-
                     int x = intent.getIntExtra(UARTService.ACTION_RECEIVE_WEIGHT_DATA_XVALUE, 0);
                     int y = intent.getIntExtra(UARTService.ACTION_RECEIVE_WEIGHT_DATA_YVALUE, 0);
                     int z = intent.getIntExtra(UARTService.ACTION_RECEIVE_WEIGHT_DATA_ZVALUE, 0);
                     int angle = intent.getIntExtra(UARTService.ACTION_RECEIVE_WEIGHT_DATA_ANGLE, 0);
+
+                    if(false == isCountRecevied)            return;
+                    if(true == isNotWorkout)                return;
+                    if(true == isWrongWorkOut)              return;
+
+                    DebugLogger.d(TAG, "WorkoutData X = " +x + ", Y = " + y + ", Z = " + z);
+                    DebugLogger.d(TAG, "WorkoutData Angle = " + angle);
+
+                    stopNotWorkAnimation();
+                    countTextView.clearAnimation();
+
 
                     if(prevZ < z) {
                         isRising = true;
@@ -559,8 +580,10 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                         isLower = false;
                     }
 
-                    DebugLogger.d(TAG, "TextColor prevZ = " + prevZ + ", Z = " + z );
-                    DebugLogger.d(TAG, "TextColor savedCount = " + savedCount + ", mCount = " + mCount );
+//                    DebugLogger.d(TAG, "TextColor prevZ = " + prevZ + ", Z = " + z );
+//                    DebugLogger.d(TAG, "TextColor savedCount = " + savedCount + ", mCount = " + mCount );
+
+
 //                    if((savedCount == mCount &&  (isRising || isLower)) || (savedCount != mCount && isLower)) {
 //                        DebugLogger.d(TAG, "TextColor isTextColorLock true!!!!!!!!!!!");
 //                        isTextColorLock = true;
@@ -646,7 +669,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                     angleTextView.setText(getString(R.string.text_angle, angle));
                     mAngleNiddle.setRotation(angle);
 
-                    DebugLogger.d(TAG, "mMotionBroadcastReceiver x = " + x + ", y = " +y + ",z = "+z);
+//                    DebugLogger.d(TAG, "mMotionBroadcastReceiver x = " + x + ", y = " +y + ",z = "+z);
             }
             });
         }
@@ -659,8 +682,17 @@ public class WorkoutActivity extends BaseAppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-//                    isCountRecevied = true;
-                    isNotWorkout = true;
+
+                    int count = intent.getIntExtra(UARTService.ACTION_RECEIVE_COUNT_DATA_COUNT, 0);
+                    int accuracy = intent.getIntExtra(UARTService.ACTION_RECEIVE_COUNT_DATA_ACCURACY, 0);
+
+                    DebugLogger.d(TAG, "WorkoutData count = " +  count + ", accuracy = " + accuracy );
+
+                    if(count < 3) {
+                        return;
+                    }
+                    isCountRecevied = true;
+                    isNotWorkout = false;
 //                    if(null != timer) {
 //                        timer.cancel();
 //                        timer = null;
@@ -679,43 +711,48 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 
                     countTextView.clearAnimation();
 
-                    int count = intent.getIntExtra(UARTService.ACTION_RECEIVE_COUNT_DATA_COUNT, 0);
-                    int accuracy = intent.getIntExtra(UARTService.ACTION_RECEIVE_COUNT_DATA_ACCURACY, 0);
-
-                    DebugLogger.d(TAG, "mCountBroadcastReceiver count = " + count);
-                    DebugLogger.d(TAG, "mMotionBroadcastReceiver accuracy = " + accuracy);
+//                    DebugLogger.d(TAG, "eeeeeeeee count = " + count);
+//                    DebugLogger.d(TAG, "mCountBroadcastReceiver count = " + count);
+//                    DebugLogger.d(TAG, "mMotionBroadcastReceiver accuracy = " + accuracy);
 
                     WorkoutVo data = mWorkoutList.get(exerciseNum);
 
-                    countTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 120);
-                    countTextView.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+//                    countTextView.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                     savedCount = mCount;
                     mCount = count;
 
 //                    if(count > data.getReps()) {
+//                        unregisterReceiver(mCountBroadcastReceiver);
+//                        mCountBroadcastReceiver = null;
+//                        nextStep();
 //                        return;
 //                    }
-
-                    int tmp = count%10;
-
+//
+//                    int tmp = count%10;
+//                    if(count == 10 ) {
+//                        tmp = 10;
+//                    }
+//
 //                    int resId = getResources().getIdentifier("count_" + tmp, "raw", mContext. getPackageName());
 //                    soundID = soundPool.load(mContext, resId, 1);
 
-                    tmp = 0;
-                    if(count -1 <= 0) {
-                        tmp = 1;
-                    }else {
-                        tmp = count;
-                    }
-
-                    if(tmp >= (data.getReps()-1)) {
-                        tmp = data.getReps() -1;
-                    }
+//                    tmp = 0;
+//                    if(count -1 <= 0) {
+//                        tmp = 1;
+//                    }else {
+//                        tmp = count;
+//                    }
+//
+//                    if(tmp >= (data.getReps()-1)) {
+//                        tmp = data.getReps() -1;
+//                    }
 
 //                    mAccuracy[tmp-1] = accuracy;
+                    mAccuracy = accuracy;
 
 //                    countTextView.setTextColor(Color.WHITE);
 
+                    countTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 120);
                     countTextView.setText(String.valueOf(count));
 
 //                    if(mCount >= data.getReps()) {
@@ -736,6 +773,8 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                 @Override
                 public void run() {
 //                    mGaugeBg.setVisibility(View.GONE);
+
+                    DebugLogger.d(TAG, "WorkoutData Not during exercise!!!!!!!!!");
 
                     initAngleUI();
                     isNotWorkout = true;
@@ -832,8 +871,15 @@ public class WorkoutActivity extends BaseAppCompatActivity {
         WorkoutVo data = mWorkoutList.get(exerciseNum);
         String exerciseName = data.getExerciseName();
 
-        byte[] exerciseCode = SmartWeightUtility.getExerciseCode(mContext, exerciseName);
-        mApplication.send(CmdConst.CMD_REQUEST_START, (byte)5, exerciseCode);
+        final byte[] exerciseCode = SmartWeightUtility.getExerciseCode(mContext, exerciseName);
+
+        new Handler(getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mApplication.send(CmdConst.CMD_REQUEST_START, (byte)5, exerciseCode);
+            }
+        }, 400);
+
     }
 
     @Override
@@ -869,6 +915,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
     @Override
     public void onBackPressed() {
         stopWorkoutCmd();
+        mApplication.mGuideResultVo.clear();
         super.onBackPressed();
     }
 

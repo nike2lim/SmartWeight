@@ -228,6 +228,8 @@ public class SmartWeightUtility {
 		}else if(exerciseCode[0] == 'Z') {
 			exerciseName = context.getString(R.string.text_plank);
 		}
+
+
 		return exerciseName;
 	}
 

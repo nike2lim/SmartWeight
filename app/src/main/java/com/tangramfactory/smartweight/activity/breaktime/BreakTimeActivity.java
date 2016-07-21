@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
@@ -31,7 +32,7 @@ import java.util.Arrays;
 
 public class BreakTimeActivity extends BaseAppCompatActivity {
     private final static int MSG_ID_TIME_COUNT = 0x01;
-    private final static int READY_TIME = 60;
+    private final static int READY_TIME = 10;
 
     private int time_count = READY_TIME;
 
@@ -159,19 +160,25 @@ public class BreakTimeActivity extends BaseAppCompatActivity {
         GuideResultVo resultVo = mApplication.mGuideResultVo.get(exerciseNum);
         endTime = DateTime.now(DateTimeZone.UTC);
 
-        int[] restTimeVal = SmartWeightUtility.getTimeHMS(endTime.getMillis() - startTime.getMillis());
 
-        String restTime = "-";
-        if(restTimeVal[1] > 0) {
-            restTime = String.valueOf(restTimeVal[1]) + "min";
-        }
+        ArrayList setInfoList = resultVo.getSetInfoList();
+        GuideResultVo.SetInfo setInfo = (GuideResultVo.SetInfo) setInfoList.get(data.getCurrentSetNum());
+        setInfo.setRestTime(endTime.getMillis() - startTime.getMillis());
+        resultVo.setInfo(data.getCurrentSetNum(), setInfo);
 
-        if(restTimeVal[2] > 0) {
-            if(restTime.contains("-")) {
-                restTime = "";
-            }
-            restTime = restTime + String.valueOf(restTimeVal[2]) + "sec";
-        }
+//        int[] restTimeVal = SmartWeightUtility.getTimeHMS(endTime.getMillis() - startTime.getMillis());
+//
+//        String restTime = "-";
+//        if(restTimeVal[1] > 0) {
+//            restTime = String.valueOf(restTimeVal[1]) + "min";
+//        }
+//
+//        if(restTimeVal[2] > 0) {
+//            if(restTime.contains("-")) {
+//                restTime = "";
+//            }
+//            restTime = restTime + String.valueOf(restTimeVal[2]) + "sec";
+//        }
 
         String totalTime ="-";
         int[] totalTimeVal = SmartWeightUtility.getTimeHMS(endTime.getMillis() - resultVo.getStartTime().getMillis());
@@ -188,7 +195,7 @@ public class BreakTimeActivity extends BaseAppCompatActivity {
             totalTime = totalTime + String.valueOf(totalTimeVal[2]) + "sec";
         }
 
-        resultVo.setRestTime(restTime);
+//        resultVo.setRestTime(restTime);
         resultVo.setTotalTime(totalTime);
         mApplication.mGuideResultVo.set(exerciseNum, resultVo);
 
@@ -212,7 +219,6 @@ public class BreakTimeActivity extends BaseAppCompatActivity {
             intent.putExtra("exerciseNum", exerciseNum);
             intent.putExtra("exerciseList", mWorkoutList);
             startActivity(intent);
-
         }
         finish();
     }
@@ -309,6 +315,7 @@ public class BreakTimeActivity extends BaseAppCompatActivity {
     @Override
     public void onBackPressed() {
         stopWorkoutCmd();
+        mApplication.mGuideResultVo.clear();
         super.onBackPressed();
     }
 }

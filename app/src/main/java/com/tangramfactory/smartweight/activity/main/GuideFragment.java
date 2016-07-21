@@ -467,7 +467,7 @@ public class GuideFragment extends Fragment{
 //        4. Å±¹é
 //        5. ·±Áö
 
-        WorkoutVo obj = new WorkoutVo(getString(R.string.text_curl),"Dumbell", 8, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 3);
+        WorkoutVo obj = new WorkoutVo(getString(R.string.text_curl),"Dumbell", 10, "5", "lbs", 10, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 3);
 //        WorkoutVo obj2 = new WorkoutVo(getString(R.string.text_lateral_raises),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
 //        WorkoutVo obj3 = new WorkoutVo(getString(R.string.text_shoulder_press),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);
 //        WorkoutVo obj4 = new WorkoutVo(getString(R.string.text_kick_back),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);

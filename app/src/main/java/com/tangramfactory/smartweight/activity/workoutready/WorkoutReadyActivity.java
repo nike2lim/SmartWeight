@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.tangramfactory.smartweight.SmartWeightApplication;
 import com.tangramfactory.smartweight.activity.base.BaseAppCompatActivity;
 import com.tangramfactory.smartweight.activity.device.ScanActivity;
 import com.tangramfactory.smartweight.activity.workout.WorkoutActivity;
+import com.tangramfactory.smartweight.activity.workout.WorkoutAnaliticActivity;
 import com.tangramfactory.smartweight.utility.SmartWeightUtility;
 import com.tangramfactory.smartweight.vo.WorkoutVo;
 
@@ -31,6 +33,7 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
     ImageButton deviceBatteryStateImage;
 
     TextView timeCountTextView;
+    TextView secUnitTextView;
     ImageButton NextButton;
     TextView exerciseNumTextView;
 
@@ -73,10 +76,11 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
     protected void loadCodeView() {
         deviceBatteryStateImage = (ImageButton) findViewById(R.id.deviceBatteryState);
         timeCountTextView = (TextView)findViewById(R.id.second);
+        secUnitTextView = (TextView)findViewById(R.id.secUnit);
         NextButton = (ImageButton)findViewById(R.id.next_btn);
 
 
-        timeCountTextView.setText(String.valueOf(time_count));
+//        timeCountTextView.setText(String.valueOf(time_count));
         Message msg = Message.obtain();
         msg.what = MSG_ID_TIME_COUNT;
         mTimeCheck.sendMessageDelayed(msg, 1500);
@@ -116,7 +120,10 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
             }
         });
 
-//        int resId = getResources().getIdentifier("count_" + time_count, "raw", mContext. getPackageName());
+        if(soundID != 0) {
+            soundPool.stop(soundID);
+        }
+
         int resId = getResources().getIdentifier("ready", "raw", mContext. getPackageName());
         soundID = soundPool.load(this, resId, 1);
     }
@@ -130,6 +137,10 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
                         int resId = getResources().getIdentifier("count_" + time_count, "raw", mContext. getPackageName());
                         soundID = soundPool.load(mContext, resId, 1);
 
+                        timeCountTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 93);
+                        if(secUnitTextView.getVisibility() != View.VISIBLE) {
+                            secUnitTextView.setVisibility(View.VISIBLE);
+                        }
                         timeCountTextView.setText(String.valueOf(time_count));
                         Message sendMsg = Message.obtain();
                         sendMsg.what = MSG_ID_TIME_COUNT;
@@ -180,6 +191,7 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
 
     private void startWorkoutActivity() {
         Intent intent = new Intent(mContext, WorkoutActivity.class);
+//        Intent intent = new Intent(mContext, WorkoutAnaliticActivity.class);
         intent.putExtra("stepNum", stepNum);
         intent.putExtra("exerciseNum", exerciseNum);
         intent.putExtra("exerciseList", mWorkoutList);
@@ -220,6 +232,7 @@ public class WorkoutReadyActivity extends BaseAppCompatActivity {
     @Override
     public void onBackPressed() {
         stopWorkoutCmd();
+        mApplication.mGuideResultVo.clear();
         super.onBackPressed();
     }
 }

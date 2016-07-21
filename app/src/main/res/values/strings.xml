@@ -72,6 +72,7 @@
     <string name="text_start">START</string>
     <string name="text_connect">CONNECT</string>
 
+    <string name="text_ready">READY</string>
 
     <![CDATA[Goal <font color=\"#a7ef52\">%1$d</font>]]>
 

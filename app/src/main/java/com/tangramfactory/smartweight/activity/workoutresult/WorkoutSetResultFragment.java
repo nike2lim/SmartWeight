@@ -123,8 +123,9 @@ public class WorkoutSetResultFragment extends BaseWorkoutResultFragment {
                 soundPool.play(soundID, volume, volume, 1, 0, 1f);
             }
         });
-
-
+        if(soundID != 0) {
+            soundPool.stop(soundID);
+        }
         int resId = getResources().getIdentifier("finish", "raw", getActivity().getPackageName());
         soundID = soundPool.load(getActivity(), resId, 1);
     }

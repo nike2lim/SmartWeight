@@ -8,6 +8,13 @@
     android:id="@+id/root"
     android:background="@drawable/level_01">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#99000000"
+        >
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -30,6 +37,7 @@
             android:padding="10dp"
             android:src="@drawable/ic_title_connect_no" />
     </android.support.v7.widget.Toolbar>
+
 
     <TextView
         android:id="@+id/exerciseNum"
@@ -59,12 +67,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="5"
+            android:text="@string/text_ready"
             android:textColor="@color/white"
-            android:textSize="93dp"
+            android:textSize="53sp"
             android:background="@drawable/ready_progress"/>
 
             <TextView
+                android:visibility="gone"
+                android:id="@+id/secUnit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|center_horizontal"
@@ -77,6 +87,7 @@
         </FrameLayout>
     </LinearLayout>
 
+    <!--
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,11 +98,11 @@
         android:textSize="27sp"
         android:text="READY"
         />
-
+    -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="54dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:textStyle="bold"
@@ -129,5 +140,5 @@
             android:onClick="onClick"
              />
     </RelativeLayout>
-
+    </LinearLayout>
 </LinearLayout>

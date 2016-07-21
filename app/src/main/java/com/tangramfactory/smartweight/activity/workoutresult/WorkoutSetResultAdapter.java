@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tangramfactory.smartweight.R;
+import com.tangramfactory.smartweight.SmartWeightApplication;
+import com.tangramfactory.smartweight.utility.DebugLogger;
 import com.tangramfactory.smartweight.vo.GuideResultVo;
 
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ import java.util.List;
  * Created by shlim on 2016-05-28.
  */
 public class WorkoutSetResultAdapter extends HeaderRecyclerViewAdapter implements View.OnClickListener{
+    protected static final String TAG = SmartWeightApplication.BASE_TAG + "WorkoutResultActivity";
+
     private List<GuideResultVo> items;
     private static WorkoutSetResultAdapter adapter;
     private Context mContext;
@@ -35,6 +39,8 @@ public class WorkoutSetResultAdapter extends HeaderRecyclerViewAdapter implement
         }
         items = modelData;
         adapter = this;
+
+        DebugLogger.d(TAG, "WorkoutSetResultAdapter getSetInfoList().size() = " + items.get(0).getSetInfoList().size());
     }
 
     public void addData(GuideResultVo newModelData, int position) {
@@ -113,6 +119,7 @@ public class WorkoutSetResultAdapter extends HeaderRecyclerViewAdapter implement
             for(int i=0; i < infoList.size(); i++) {
                 GuideResultVo.SetInfo info = infoList.get(i);
                 listItemViewHolder.weightUnit.setText(info.getWeightUnit());
+
                 listItemViewHolder.setCountText[i].setText(info.getSetNum() + " set");
                 listItemViewHolder.weightText[i].setText(info.getWeight());
                 listItemViewHolder.repsPerTotalText[i].setText(info.getResultReps() + "/" + info.getTotalReps());

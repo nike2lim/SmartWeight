@@ -1,5 +1,6 @@
 package com.tangramfactory.smartweight.activity.workoutresult;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -25,7 +26,7 @@ import java.util.Locale;
 
 public class WorkoutResultActivity extends BaseAppCompatActivity {
 
-    protected static final String TAG = SmartWeightApplication.BASE_TAG + "CompetitionActivity";
+    protected static final String TAG = SmartWeightApplication.BASE_TAG + "WorkoutResultActivity";
     public Toolbar toolbar;
     ViewPager viewPager;
     FragmentPagerItems pages;
@@ -79,7 +80,7 @@ public class WorkoutResultActivity extends BaseAppCompatActivity {
         pages.add(FragmentPagerItem.of(getString(R.string.text_total), WorkoutTotalResultFragment.class));
 
         adapter = new FragmentPagerItemAdapter(getSupportFragmentManager(), pages);
-        viewPager.setAdapter(adapter);
+            viewPager.setAdapter(adapter);
         viewPagerTab.setViewPager(viewPager);
         viewPager.setOffscreenPageLimit(2);
 

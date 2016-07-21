@@ -35,6 +35,10 @@ public class GuideResultVo {
         setInfoList.add(info);
     }
 
+    public void setInfo(int index, SetInfo set) {
+        setInfoList.set(index, set);
+    }
+
 
     public int getProgress() {
         return progress;
@@ -87,6 +91,7 @@ public class GuideResultVo {
         String totalReps;
         String resultReps;
         String accuracy;
+        long setRestTime;
 
 
         public String getSetNum() {
@@ -113,6 +118,8 @@ public class GuideResultVo {
             return accuracy;
         }
 
+        public long getSetRestTime() { return setRestTime; }
+
         public void setNum(String setNum) {
             this.setNum = setNum;
         }
@@ -134,6 +141,10 @@ public class GuideResultVo {
 
         public void setAccuracy(String accuracy) {
             this.accuracy = accuracy;
+        }
+
+        public void setRestTime(long restTime) {
+            this.setRestTime = restTime;
         }
 
     }
