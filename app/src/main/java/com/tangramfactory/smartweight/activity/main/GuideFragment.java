@@ -461,11 +461,11 @@ public class GuideFragment extends Fragment{
     List<WorkoutVo> dummyWorkoutList = new ArrayList<WorkoutVo>();
 
     private void dummyWorkoutData() {
-//        1. ÄÃ
-//        2. ·¹ÅÍ·² ·¹ÀÌÁî
-//        3. ¼ñ´õ ÇÁ·¹½º
-//        4. Å±¹é
-//        5. ·±Áö
+//        1. ì»¬
+//        2. ë ˆí„°ëŸ´ ë ˆì´ì¦ˆ
+//        3. ìˆ„ë” í”„ë ˆìŠ¤
+//        4. í‚¥ë°±
+//        5. ëŸ°ì§€
 
         WorkoutVo obj = new WorkoutVo(getString(R.string.text_curl),"Dumbell", 10, "5", "lbs", 10, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 3);
 //        WorkoutVo obj2 = new WorkoutVo(getString(R.string.text_lateral_raises),"Dumbell", 10, "5", "lbs", 60, "\"android.resource://\" + getPackageName() + \"/\"+R.raw.bench_press", 1);

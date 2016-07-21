@@ -293,7 +293,7 @@ public class LocalFileUpdateActivity extends BaseAppCompatActivity {
             // app-defined int constant
 
         } else {
-            // ´ÙÀ½ ºÎºĞÀº Ç×»ó Çã¿ëÀÏ °æ¿ì¿¡ ÇØ´çÀÌ µË´Ï´Ù.
+            // ë‹¤ìŒ ë¶€ë¶„ì€ í•­ìƒ í—ˆìš©ì¼ ê²½ìš°ì— í•´ë‹¹ì´ ë©ë‹ˆë‹¤.
 //            writeFile();
         }
     }

@@ -521,7 +521,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 //                        countTextView.setTextColor(Color.parseColor("#1E1E1E"));
                     }
                     else if(exerciseName.equals(getString(R.string.text_lateral_raises))) {
-//                        DebugLogger.d(TAG, "TextColor ³ë¶õ»ö");
+//                        DebugLogger.d(TAG, "TextColor ë…¸ë€ìƒ‰");
                         isWrongWorkOut = false;
                         showAngleLayout();
                         countTextView.setTextColor(Color.parseColor("#FFFF00"));
@@ -530,7 +530,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
                         isWrongWorkOut = false;
                         showAngleLayout();
                         if(false == isTextColorLock) {
-//                            DebugLogger.d(TAG, "TextColor Èò»ö");
+//                            DebugLogger.d(TAG, "TextColor í°ìƒ‰");
                             countTextView.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                         }
                     }
@@ -590,7 +590,7 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 //                    }else {
 //                        DebugLogger.d(TAG, "TextColor isTextColorLock false!!!!!!!!!!!");
 //                        isTextColorLock = false;
-//                        DebugLogger.d(TAG, "TextColor Èò»ö");
+//                        DebugLogger.d(TAG, "TextColor í°ìƒ‰");
 //                        countTextView.setTextColor(ContextCompat.getColor(mContext, R.color.white));
 //                    }
 
@@ -637,13 +637,13 @@ public class WorkoutActivity extends BaseAppCompatActivity {
 //                    mGuageNiddle.setRotation(45 + z);
 //                    mGuageBar.setClippingAngle(135+ z);
 
-                    //z°¡ 100ÀÌ µé¾î¿À¸é clipÀº 270
-                    //z°¡ 200ÀÌ µé¾î¿À¸é clipÀº 405
+                    //zê°€ 100ì´ ë“¤ì–´ì˜¤ë©´ clipì€ 270
+                    //zê°€ 200ì´ ë“¤ì–´ì˜¤ë©´ clipì€ 405
 
                     float clip = (float)(z * 1.35);
 
-                    //z°¡ 100ÀÌ µé¾î¿À¸é angleÀº 180
-                    //z°¡ 200ÀÌ µé¾î¿À¸é angleÀº 315
+                    //zê°€ 100ì´ ë“¤ì–´ì˜¤ë©´ angleì€ 180
+                    //zê°€ 200ì´ ë“¤ì–´ì˜¤ë©´ angleì€ 315
 //                    float angle =(float)(z * 1.35);
 
                     mGuageNiddle.setRotation(45 + clip);

@@ -94,7 +94,6 @@
         <activity
             android:name=".activity.workout.WarningActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/Theme.Transparent"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent" />
